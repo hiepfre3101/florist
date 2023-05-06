@@ -6,11 +6,13 @@ import { IUser } from '../interface/user'
 interface IAuthState {
    isLogin: boolean
    userInfo: IUser
+   token: string
 }
 
 const initState: IAuthState = {
    isLogin: false,
-   userInfo: {} as IUser
+   userInfo: {} as IUser,
+   token: ''
 }
 
 export const authSlice = createSlice({
@@ -25,10 +27,14 @@ export const authSlice = createSlice({
       },
       setUser: (state, action) => {
          state.userInfo = action.payload
+      },
+      token: (state, action) => {
+         state.token = action.payload
       }
    }
 })
 
 export const selectAuthStatus = (state: RootState) => state.auth.isLogin
+export const selectorToken = (state: RootState) => state.auth.token
 export const selectorUser = (state: RootState) => state.auth.userInfo
 export default authSlice.reducer

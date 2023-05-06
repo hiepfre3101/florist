@@ -14,7 +14,7 @@ export const getAll = async (req, res) => {
     }
     return res.json({
       message: "Lấy danh sách sản phẩm thành công",
-      categories,
+      data:categories,
     });
   } catch (error) {
     return res.status(400).json({

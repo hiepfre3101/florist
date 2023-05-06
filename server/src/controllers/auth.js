@@ -30,7 +30,7 @@ export const createAccount = async (req, res) => {
       password: hashedPwd,
       role: "member",
       avatarDefault:
-        "https://res.cloudinary.com/diqyzhuc2/image/upload/v1682956709/hoaUi/icon_sacea8.png",
+        "https://res.cloudinary.com/diqyzhuc2/image/upload/v1683285518/hoaUi/icon_sacea8-removebg_gkhuzj.png",
     });
     if (!user) {
       return res.json({
@@ -90,6 +90,47 @@ export const signin = async (req, res) => {
     return res.status(200).json({
       data: userExist,
       accessToken: token,
+      status: "success",
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: error,
+      status: "not success",
+    });
+  }
+};
+
+export const getToken = (req, res) => {
+  try {
+    const token = req.cookies.jwt;
+    if (!token) {
+      return res.json({
+        token: "",
+      });
+    }
+    return res.json({
+      token: token,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: error,
+      status: "not success",
+    });
+  }
+};
+
+export const clearToken = (req, res) => {
+  try {
+    const token = req.cookies?.jwt;
+    if (!token) {
+      return res.json({
+        message: "not have cookie token",
+        status: "success",
+      });
+    }
+    res.clearCookie("jwt");
+    return res.json({
+      message: "cleared cookie",
       status: "success",
     });
   } catch (error) {

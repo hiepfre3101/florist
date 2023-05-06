@@ -7,3 +7,10 @@ export const signup = (data: IInputSignup) => {
 export const signin = (data: IInputSignin) => {
    return instance.post('/signin', data, { withCredentials: true })
 }
+
+export const getToken = () => {
+   return instance.get('/token')
+}
+export const clearToken = () => {
+   return instance.delete('/clear-token')
+}

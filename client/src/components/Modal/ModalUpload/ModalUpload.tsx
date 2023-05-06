@@ -118,7 +118,7 @@ const ModalUpload = ({ isOpen, onClose, onAdd }: Props) => {
                      </Form.Item>
                      <Form.Item className='absolute bottom-10 left-[40%] translate-x-[-50%]'>
                         <button className='ml-10 py-1 px-5 duration-500 font-semibold border rounded-md border-primary hover:bg-primary hover:text-white'>
-                           Save
+                           Upload
                         </button>
                      </Form.Item>
                   </Form>
@@ -127,7 +127,7 @@ const ModalUpload = ({ isOpen, onClose, onAdd }: Props) => {
             <div className='px-5 py-5 w-[70%]'>
                <p className='text-lg font-semibold'>Your Images</p>
                <div className='flex gap-5 flex-wrap mt-5 overflow-auto max-h-[80%]'>
-                  {images.length === 0 ? (
+                  {images.length !== 0 ? (
                      images.map((img, index) => (
                         <FileImage
                            typeMask='async'
@@ -139,7 +139,7 @@ const ModalUpload = ({ isOpen, onClose, onAdd }: Props) => {
                         />
                      ))
                   ) : (
-                     <h2>Empty data</h2>
+                     <h2 className='text-center'>Empty data</h2>
                   )}
                </div>
             </div>

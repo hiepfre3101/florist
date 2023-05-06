@@ -1,7 +1,7 @@
 import AddProduct from '../admin/products/AddProduct'
 import Dashboard from '../admin/Dashboard'
 import UpdateProduct from '../admin/products/UpdateProduct'
-import Product from '../client/Product'
+import Product from '../client/ProductDetail/Product'
 import ProductsPage from '../admin/products/ProductPage'
 import UpdateCategory from '../admin/categories/UpdateCategory'
 import CategoryPage from '../admin/categories/CategoryPage'
@@ -31,7 +31,7 @@ export const clientRoutes: IRoute[] = [
       element: Flower
    },
    {
-      path: '/products/:id',
+      path: '/:id',
       element: Product
    }
 ]

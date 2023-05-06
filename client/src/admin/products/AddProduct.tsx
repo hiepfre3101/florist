@@ -45,9 +45,9 @@ const AddProduct = () => {
       ;(async () => {
          try {
             const {
-               data: { categories }
+               data: { data }
             } = await getAllCategory()
-            setCategories(categories)
+            setCategories(data)
          } catch (error) {
             console.log(error)
          }

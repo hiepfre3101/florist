@@ -54,7 +54,13 @@ const ProductsPage = () => {
    }, [tableParams.pagination?.current])
    const removeItem = async (id: string): Promise<void> => {
       try {
-         await deleteProduct(id)
+         const {
+            data: { status }
+         } = await deleteProduct(id)
+         if (status !== 'success') {
+            message.error('Delete fail!')
+            return
+         }
          const newProducts = products.filter((product) => product._id !== id)
          message.success('Delete successfully!')
          setProducts(newProducts)

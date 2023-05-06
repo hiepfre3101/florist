@@ -62,6 +62,7 @@ export const columnsProduct = ({ onDelete }: agrColumns): ColumnsType<IProduct> 
                   <Button>Update</Button>
                </Link>
                <Popconfirm
+               okButtonProps={{className:"bg-orangeH"}}
                   onConfirm={() => onDelete(record.key)}
                   title='Delete Item'
                   description='Do you want to delete this item ?'

@@ -28,7 +28,7 @@ export const getAll = async (req, res) => {
     }
     return res.json({
       message: "Lấy danh sách sản phẩm thành công",
-      products,
+      data:products,
     });
   } catch (error) {
     return res.status(400).json({
@@ -147,6 +147,7 @@ export const remove = async (req, res) => {
     res.json({
       message: "Xóa sản phẩm thành công",
       product,
+      status:"success"
     });
   } catch (error) {
     return res.status(400).json({

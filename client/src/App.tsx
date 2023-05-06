@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter, useNavigate } from 'react-router-dom'
+import { BrowserRouter, useOutletContext } from 'react-router-dom'
 import { Route, Routes } from 'react-router'
 
 import { message } from 'antd'
@@ -11,14 +11,31 @@ import { FormContextProvider } from './context/statusForm'
 import AdminLayout from './layouts/AdminLayout'
 import HomePage from './client/HomePage/HomePage'
 import AuthenForm from './auth/AuthenForm'
+import { clearToken } from './api/auth/auth'
+
+type ContextOutlet = {
+   logout: () => void
+}
 function App() {
    const [messageApi, contextHolder] = message.useMessage()
    const dispatch = useAppDispatch()
-   const handleLogout = () => {
-      localStorage.removeItem('token')
-      localStorage.removeItem('user')
-      dispatch(authSlice.actions.logout(false))
-      window.location.assign('/')
+   const handleLogout = async () => {
+      try {
+         const {
+            data: { status }
+         } = await clearToken()
+         if (status !== 'success') {
+            message.error('something wrong!')
+            return
+         }
+         localStorage.removeItem('user')
+         dispatch(authSlice.actions.token(''))
+         dispatch(authSlice.actions.setUser({}))
+         dispatch(authSlice.actions.logout(false))
+      } catch (error) {
+         message.error('something wrong!')
+         console.log(error)
+      }
    }
    useEffect(() => {
       const token = localStorage.getItem('token')
@@ -29,7 +46,7 @@ function App() {
       }
    }, [])
    return (
-      <div className='App max-w-[1480px] my-0 mx-auto min-h-screen pb-10'>
+      <div className='App max-w-[1920px] my-0 mx-auto min-h-screen pb-10'>
          {contextHolder}
          <BrowserRouter>
             <Routes>
@@ -59,5 +76,7 @@ function App() {
       </div>
    )
 }
-
+export const useLogout = () => {
+   return useOutletContext<ContextOutlet>()
+}
 export default App
