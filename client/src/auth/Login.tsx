@@ -4,6 +4,8 @@ import Loading from '../components/Loading/Loading'
 import { signin } from '../api/auth/auth'
 import { useNavigate } from 'react-router-dom'
 import ErrorSpan from '../components/ErrorSpan'
+import { useAppDispatch } from '../hooks/redux/hooks'
+import { authSlice } from './authSlice'
 type Props = {
    status: 'login' | 'signup'
    onChangeStatus: (s: 'login' | 'signup') => void
@@ -18,6 +20,7 @@ const Login = ({ status, onChangeStatus }: Props) => {
    const [isLoading, setIsLoading] = useState(false)
    const [formError, setErrorForm] = useState('')
    const navigate = useNavigate()
+   const dispatch = useAppDispatch()
    const onFinish = async (values: any) => {
       try {
          setIsLoading(true)
@@ -27,7 +30,13 @@ const Login = ({ status, onChangeStatus }: Props) => {
             if (user.data?.status !== 'success') {
                setErrorForm(user.data?.message)
             } else {
+               dispatch(authSlice.actions.login(true))
+               dispatch(authSlice.actions.setUser(user.data?.data))
+               dispatch(authSlice.actions.token(user.data?.accessToken))
                localStorage.setItem('user', JSON.stringify(user.data?.data))
+               if (user.data?.data?.role === 'admin') {
+                  return navigate('/admin')
+               }
                navigate('/')
             }
          }

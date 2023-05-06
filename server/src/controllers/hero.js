@@ -11,7 +11,7 @@ export const getAll = async (req, res) => {
     }
     return res.json({
       message: "Lấy danh sách banner thành công",
-      heros,
+      data:heros,
     });
   } catch (error) {
     return res.status(400).json({

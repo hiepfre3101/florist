@@ -4,7 +4,7 @@ import FlowerIcon from '../Icons/FlowerIcon'
 const Loading = () => {
    const flowerIcon = <FlowerIcon className='spin' />
    return (
-      <div className='flex justify-center items-center w-full min-h-full relative'>
+      <div className='flex justify-center items-center w-full h-full relative'>
          <Spin
             size='large'
             indicator={flowerIcon}

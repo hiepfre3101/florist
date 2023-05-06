@@ -5,13 +5,14 @@ import User from "../models/user";
 dotenv.config();
 export const checkPermission = async (req, res, next) => {
   try {
+    const authHeader = req.headers.authorization;
     //check login
-    if (!req.cookies.jwt) {
+    if (!authHeader) {
       return res.json({
         message: "Ban phai dang nhap de thuc hien hanh dong nay.",
       });
     }
-    const token = req.cookies.jwt;
+    const token = authHeader && authHeader.split(" ")[1];
     //decode jwt
     const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
     //get user

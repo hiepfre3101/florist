@@ -1,14 +1,27 @@
 import { message } from 'antd'
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
+import { getToken } from '../api/auth/auth'
+import { useAppDispatch } from '../hooks/redux/hooks'
+import { authSlice } from '../auth/authSlice'
+import { useLogout } from '../App'
 const Dashboard = () => {
+   const { logout } = useLogout()
    const navigate = useNavigate()
+   const dispatch = useAppDispatch()
    useEffect(() => {
-      const user = JSON.parse(localStorage.getItem('user')!)
-      if (!user || user.role !== 'admin') {
-         message.warning('Only for admin!', 20)
-         navigate('/')
-      }
+      ;(async () => {
+         const userExist = localStorage.getItem('user')
+         const {
+            data: { token }
+         } = await getToken()
+         if (token) {
+            dispatch(authSlice.actions.login(true))
+            dispatch(authSlice.actions.setUser(JSON.parse(userExist!)))
+         } else {
+            navigate('/')
+         }
+      })()
    }, [])
    return <div>Dashboard</div>
 }

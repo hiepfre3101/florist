@@ -8,15 +8,17 @@ import {
    AppstoreAddOutlined,
    EyeOutlined
 } from '@ant-design/icons'
-import { Button, ConfigProvider, Dropdown, MenuProps, message } from 'antd'
+import { ConfigProvider, Dropdown, MenuProps, message } from 'antd'
 import { Layout, Menu } from 'antd'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
+
 import useMyToken from '../hooks/useMyToken'
-import { useAppSelector, useAppDispatch } from '../hooks/redux/hooks'
+import { useAppDispatch, useAppSelector } from '../hooks/redux/hooks'
 import { authSlice, selectorUser } from '../auth/authSlice'
 import { itemsNavClient } from '../configAntd/navItems'
+import { getToken } from '../api/auth/auth'
 
-const { Header, Content, Footer, Sider } = Layout
+const { Content, Header, Sider } = Layout
 type MenuItem = Required<MenuProps>['items'][number]
 
 function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode, children?: MenuItem[]): MenuItem {
@@ -50,20 +52,21 @@ type Props = {
 const AdminLayout = ({ logout }: Props) => {
    const [collapsed, setCollapsed] = useState(false)
    const { colorBgContainer, colorText, colorPrimary, colorLinkActive } = useMyToken()
-   const token = localStorage.getItem('token')
-   const dispatch = useAppDispatch()
    const user = useAppSelector(selectorUser)
-   const navigate = useNavigate()
    const items = itemsNavClient({ logout })
+   const dispatch = useAppDispatch()
    useEffect(() => {
-      const userExist = localStorage.getItem('user')
-      if (token) {
-         dispatch(authSlice.actions.login(true))
-         dispatch(authSlice.actions.setUser(JSON.parse(userExist!)))
-      } else {
-         navigate('/')
-         message.warning('Only for admin !')
-      }
+      ;(async () => {
+         const userExist = localStorage.getItem('user')
+         const {
+            data: { token }
+         } = await getToken()
+         if (token) {
+            dispatch(authSlice.actions.login(true))
+            dispatch(authSlice.actions.setUser(JSON.parse(userExist!)))
+            dispatch(authSlice.actions.token(token))
+         }
+      })()
    }, [])
    return (
       <Layout style={{ minHeight: '100vh' }}>
@@ -105,7 +108,7 @@ const AdminLayout = ({ logout }: Props) => {
                </div>
             </Header>
             <Content className='py-10 px-5'>
-               <Outlet />
+               <Outlet context={{ logout }} />
             </Content>
          </Layout>
       </Layout>
