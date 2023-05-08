@@ -6,9 +6,10 @@ import { useNavigate } from 'react-router-dom'
 import ErrorSpan from '../components/ErrorSpan'
 import { useAppDispatch } from '../hooks/redux/hooks'
 import { authSlice } from './authSlice'
+import FooterForm from './components/FooterForm'
 type Props = {
-   status: 'login' | 'signup'
-   onChangeStatus: (s: 'login' | 'signup') => void
+   status: 'sign in' | 'sign up'
+   onChangeStatus: (s: 'sign in' | 'sign up') => void
 }
 
 interface IInputSignin {
@@ -46,54 +47,45 @@ const Login = ({ status, onChangeStatus }: Props) => {
          console.log(error)
       }
    }
-   if (isLoading) return <Loading />
-   if (status === 'signup')
-      return (
-         <button onClick={() => onChangeStatus('login')} className='text-white z-10 relative'>
-            Login
-         </button>
-      )
+   if (isLoading) return <Loading sreenSize='lg'/>
    return (
-      <div>
+      <div className='flex flex-col items-start w-[30%] h-auto aspect-square'>
+         <p className='text-primary text-3xl'>Sign in</p>
          <Form
-            name='login'
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}
-            style={{ maxWidth: 600 }}
+            layout='vertical'
+            name='signin'
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete='off'
             validateTrigger={['onChange', 'onBlur']}
+            className='bg-yellowW flex justify-center flex-col items-start w-full h-full mt-10 px-6 overflow-auto pt-5 '
          >
+            <p className='text-xl text-primary uppercase font-vollkorn mb-10'>information</p>
             <Form.Item
-               label='Email'
                name='email'
                rules={[
                   { required: true, message: 'Please input your email!' },
                   { type: 'email', message: 'Please input valid email!' }
                ]}
             >
-               <Input />
+               <Input className='rounded-sm p-3 text-[1rem] outline-none' />
             </Form.Item>
 
-            <Form.Item
-               label='Password'
-               name='password'
-               rules={[{ required: true, message: 'Please input your password!' }]}
-            >
-               <Input.Password />
+            <Form.Item name='password' rules={[{ required: true, message: 'Please input your password!' }]}>
+               <Input.Password className='rounded-sm p-3 text-[1rem] outline-none' />
             </Form.Item>
             <ErrorSpan message={formError} />
-            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Form.Item className='mt-5'>
                <button
-                  className='px-4 py-1 rounded-lg duration-300 border border-primary text-primary font-semibold hover:bg-primary hover:text-white'
+                  className='font-vollkorn text-lg px-4 py-2 rounded-sm  text-white font-semibold w-full flex justify-center items-center bg-greenY'
                   type='submit'
                >
-                  Submit
+                  Sign in
                </button>
             </Form.Item>
          </Form>
+         <FooterForm title="don't have account ?" action={{ changeStatus: onChangeStatus, name: 'sign up' }} />
       </div>
    )
 }

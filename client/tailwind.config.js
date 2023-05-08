@@ -4,13 +4,13 @@ export default {
    theme: {
       extend: {
          fontFamily: {
-            slab: ['Roboto Slab', 'serif']
+            vollkorn: ['Vollkorn', 'serif']
          },
          fontWeight: {
             thin: '200',
-            normal: '300',
+            normal: '400',
             semibold: '500',
-            bold: '700'
+            bold: '800'
          },
          colors: {
             primary: '#175957',
@@ -27,7 +27,7 @@ export default {
             ss: '620px',
             sm: '768px',
             md: '1060px',
-            lg: '1200px',
+            lg: '1300px',
             xl: '1700px'
          }
       }

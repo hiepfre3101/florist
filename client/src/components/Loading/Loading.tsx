@@ -1,10 +1,15 @@
 import { Spin } from 'antd'
 import React from 'react'
 import FlowerIcon from '../Icons/FlowerIcon'
-const Loading = () => {
+type Props = {
+   sreenSize?: 'md' | 'lg'
+}
+const Loading = ({ sreenSize }: Props) => {
    const flowerIcon = <FlowerIcon className='spin' />
    return (
-      <div className='flex justify-center items-center w-full h-full relative'>
+      <div
+         className={`flex justify-center items-center w-full h-full relative ${sreenSize === 'lg' && 'min-h-[1000px]'}`}
+      >
          <Spin
             size='large'
             indicator={flowerIcon}

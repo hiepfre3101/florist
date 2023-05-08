@@ -46,7 +46,7 @@ function App() {
       }
    }, [])
    return (
-      <div className='App max-w-[1920px] my-0 mx-auto min-h-screen pb-10'>
+      <div className='App max-w-[1920px] my-0 mx-auto'>
          {contextHolder}
          <BrowserRouter>
             <Routes>
@@ -64,7 +64,6 @@ function App() {
                      return <Route key={index} path={route.path} element={<Page />}></Route>
                   })}
                </Route>
-               <Route path='/auth' element={<AuthenForm />}></Route>
                <Route path='/admin' element={<AdminLayout logout={handleLogout} />}>
                   {adminRoutes.map((route, index) => {
                      const Page = route.element

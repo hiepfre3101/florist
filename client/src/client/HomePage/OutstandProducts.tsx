@@ -10,9 +10,9 @@ const OutstandProducts = (props: Props) => {
    const { data, loading } = useListItem<IProduct[]>({ getList: getAllProduct, options: { limit: 5 } })
    if (loading) return <Loading />
    return (
-      <div className='w-[90%] p-5 mt-10 my-0 mx-auto '>
+      <div className='w-[90%] p-5 mt-10 my-0 mx-auto'>
          <p className='text-primary text-3xl font-semobold text-center'>Hurry up to order</p>
-         <div className='grid grid-cols-4 grid-rows-2 gap-[3rem] mt-10 p-5'>
+         <div className='grid grid-cols-4 grid-rows-2 gap-[3rem] mt-10 p-5 ' >
             {data?.map((product, index) => (
                <div className={index === 1 ? 'col-start-2 col-end-4 row-start-1 row-end-3' : ''} key={index}>
                   <CardProduct

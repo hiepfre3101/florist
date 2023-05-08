@@ -24,17 +24,14 @@ const HomePage = () => {
             dispatch(authSlice.actions.setUser(JSON.parse(userExist!)))
          } else {
             logout()
-            message.warning('Login expired! Please login again')
          }
          setIsLoading(false)
       })()
    }, [])
-   if (isLoading) return <Loading />
+   if (isLoading) return <Loading sreenSize='lg' />
    return (
-      <div className='w-full h-full md:h-[50%] lg:h-full'>
-       <div className='relative w-full h-[80%]'>
-           <Hero/>
-       </div>
+      <div className='w-full'>
+         <Hero />
          <OutstandProducts />
       </div>
    )

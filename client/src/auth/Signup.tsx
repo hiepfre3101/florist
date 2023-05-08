@@ -4,7 +4,9 @@ import Loading from '../components/Loading/Loading'
 import { signup } from '../api/auth/auth'
 import { useNavigate } from 'react-router-dom'
 import ErrorSpan from '../components/ErrorSpan'
-type Props = { status: 'login' | 'signup'; onChangeStatus: (s: 'login' | 'signup') => void }
+import FooterForm from './components/FooterForm'
+import Label from './components/Label'
+type Props = { status: 'sign in' | 'sign up'; onChangeStatus: (s: 'sign in' | 'sign up') => void }
 
 interface IInputSignup {
    name: string
@@ -35,37 +37,32 @@ const Signup = ({ status, onChangeStatus }: Props) => {
          console.log(error)
       }
    }
-   if (isLoading) return <Loading />
-   if (status === 'login')
-      return (
-         <button onClick={() => onChangeStatus('signup')} className='text-white z-10 relative'>
-            Sign up
-         </button>
-      )
+   if (isLoading) return <Loading sreenSize='lg'/>
    return (
-      <div>
+      <div className='flex flex-col  items-start w-[30%] h-auto aspect-square'>
+         <p className='text-primary text-[3rem]'>Sign up</p>
          <Form
             form={form}
+            layout='vertical'
             name='signup'
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}
-            style={{ maxWidth: 600 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete='off'
             validateTrigger={['onChange', 'onBlur']}
+            className='bg-yellowW flex justify-center flex-col items-start w-full h-full mt-10 px-6 overflow-auto pt-64'
          >
+            <p className='text-xl text-primary uppercase font-vollkorn mb-5'>information</p>
             <Form.Item
+               label={<Label title='Your name' />}
                hasFeedback
-               label='Name'
                name='name'
                rules={[{ required: true, message: 'Please input your name!' }]}
             >
-               <Input />
+               <Input className='rounded-sm p-3 text-[1rem] outline-none' />
             </Form.Item>
             <Form.Item
-               label='Email'
+               label={<Label title='Email' />}
                name='email'
                rules={[
                   { required: true, message: 'Please input your email!' },
@@ -73,20 +70,20 @@ const Signup = ({ status, onChangeStatus }: Props) => {
                ]}
                hasFeedback
             >
-               <Input />
+               <Input className='rounded-sm p-3 text-[1rem] outline-none' />
             </Form.Item>
 
             <Form.Item
-               label='Password'
+               label={<Label title='Password' />}
                name='password'
                rules={[{ required: true, message: 'Please input your password!' }]}
                hasFeedback
             >
-               <Input.Password />
+               <Input.Password className='rounded-sm p-3 text-[1rem] outline-none' />
             </Form.Item>
             <Form.Item
+               label={<Label title='Confirm password' />}
                name='confirmPassword'
-               label='Confirm Password'
                dependencies={['password']}
                hasFeedback
                rules={[
@@ -104,18 +101,19 @@ const Signup = ({ status, onChangeStatus }: Props) => {
                   })
                ]}
             >
-               <Input.Password />
+               <Input.Password className='rounded-sm p-3 text-[1rem] outline-none' />
             </Form.Item>
             <ErrorSpan message={formError} />
-            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Form.Item className='mt-10'>
                <button
-                  className='px-4 py-1 rounded-lg duration-300 border border-primary text-primary font-semibold hover:bg-primary hover:text-white'
+                  className='font-vollkorn text-lg px-4 py-2 rounded-sm  text-white font-semibold w-full flex justify-center items-center bg-greenY'
                   type='submit'
                >
-                  Submit
+                  Sign up
                </button>
             </Form.Item>
          </Form>
+         <FooterForm title='already have account ?' action={{ changeStatus: onChangeStatus, name: 'sign in' }} />
       </div>
    )
 }

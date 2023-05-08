@@ -55,24 +55,22 @@ const Hero = (props: Props) => {
       setIndex(indexData)
    }
    return (
-      <div className='h-full'>
+      <div className='relative'>
          {' '}
-         <div className='h-full'>
-            <img src={slide.image} className='w-full h-full object-cover' />
-            <div className='flex justify-center absolute bottom-6 gap-1 w-full'>
-               {fakeData.map((item, i) => (
-                  <svg width={30} height={30} onClick={() => handleChangeIndex(i)} className='cursor-pointer'>
-                     <circle
-                        cx='20'
-                        cy='20'
-                        r={index === i ? 4 : 3}
-                        strokeWidth={1}
-                        stroke={i === index ? 'white' : 'none'}
-                        fill={i === index ? 'transparent' : 'white'}
-                     />
-                  </svg>
-               ))}
-            </div>
+         <img src={slide.image} className='w-full lg:max-h-[600px] max-h-[400px] object-cover' />
+         <div className='flex justify-center absolute bottom-6 gap-1 w-full'>
+            {fakeData.map((item, i) => (
+               <svg width={30} height={30} onClick={() => handleChangeIndex(i)} className='cursor-pointer'>
+                  <circle
+                     cx='20'
+                     cy='20'
+                     r={index === i ? 4 : 3}
+                     strokeWidth={1}
+                     stroke={i === index ? 'white' : 'none'}
+                     fill={i === index ? 'transparent' : 'white'}
+                  />
+               </svg>
+            ))}
          </div>
       </div>
    )
