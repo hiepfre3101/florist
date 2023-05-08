@@ -10,22 +10,26 @@ import { useRef, useState } from 'react'
 type Props = {
    logout: () => void
 }
+export const logoWhiteLink = 'https://res.cloudinary.com/diqyzhuc2/image/upload/v1683461139/hoaUi/logo_obm7il.png'
 const Header = ({ logout }: Props) => {
    const isLogin = useAppSelector(selectAuthStatus)
    const user = useAppSelector(selectorUser)
    const items = itemsNavClient({ logout })
-   const logoWhiteLink =
-      'https://res.cloudinary.com/diqyzhuc2/image/upload/v1683345380/hoaUi/0361be2445bb4c368a5d0a624cd6cba8-removebg-preview_oasrcf.png'
-
    return (
       <header className='overflow-hidden w-full flex justify-between items-center py-1 px-14  z-30 text-primary bg-yellowW'>
-         <Link to='/' className='w-[20%] h-[75px] flex items-center justify-center pt-5'>
-            <img src={logoWhiteLink} className='w-full mb-10 ' />
+         <Link to='/' className='w-[20%] flex items-center justify-center pb-2'>
+            <img src={logoWhiteLink} className='w-[30%] h-[60px]' />
          </Link>
          <nav className='flex items-center gap-10 flex-1 justify-center'>
-            <Link to={'/new'} className='text-md font-semibold'>New</Link>
-            <Link to={'/bouquets'} className='text-md font-semibold'>Bouquets</Link>
-            <Link to={'/flowers'} className='text-md font-semibold'>Flowers</Link>
+            <Link to={'/new'} className='text-md font-semibold'>
+               New
+            </Link>
+            <Link to={'/bouquets'} className='text-md font-semibold'>
+               Bouquets
+            </Link>
+            <Link to={'/flowers'} className='text-md font-semibold'>
+               Flowers
+            </Link>
          </nav>
          {isLogin ? (
             <div className='flex gap-2 justify-evenly w-[14%] items-center text-greenY'>

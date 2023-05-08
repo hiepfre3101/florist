@@ -30,7 +30,7 @@ const ProductsPage = () => {
                page: tableParams.pagination?.current,
                sort: tableParams.sortOrder
             })
-            const formatedProducts = data.products.docs.map((product) => {
+            const formatedProducts = data.data.docs.map((product) => {
                return {
                   key: product._id,
                   ...product
@@ -41,9 +41,9 @@ const ProductsPage = () => {
                ...tableParams,
                pagination: {
                   ...tableParams.pagination,
-                  current: data.products.page,
-                  pageSize: data.products.limit,
-                  total: data.products.totalDocs
+                  current: data.data.page,
+                  pageSize: data.data.limit,
+                  total: data.data.totalDocs
                }
             })
             setIsLoading(false)

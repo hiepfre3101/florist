@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  font-family: 'Roboto Slab', serif;
+  font-family: 'Vollkorn', serif;
   line-height: 1.5;
   font-weight: 400;
 }
@@ -40,4 +40,18 @@ a {
   border-radius: 10px;
 }
 
-
+/*style ant design*/
+.ant-form-item{
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin-bottom: 10px;
+}
+.ant-form-item-row{
+  width: 100% !important;
+}
+.ant-form-item-control{
+  margin: 0;
+  flex: 1;
+}

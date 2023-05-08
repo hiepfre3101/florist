@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { getToken } from '../api/auth/auth'
 import { authSlice } from '../auth/authSlice'
 import { useAppDispatch } from '../hooks/redux/hooks'
+import Footer from '../components/Footer/Footer'
 type Props = {
    logout: () => void
 }
@@ -21,11 +22,10 @@ const DefaultLayout = ({ logout }: Props) => {
       })()
    }, [])
    return (
-      <div className='pb-10 max-w-[1920px] my-0 mx-auto min-h-screen'>
+      <div className='max-w-[1920px] my-0 mx-auto relative'>
          <Header logout={logout} />
-         <div className='w-full h-screen'>
-            <Outlet context={{ logout }} />
-         </div>
+         <Outlet context={{ logout }}/>
+         <Footer />
       </div>
    )
 }

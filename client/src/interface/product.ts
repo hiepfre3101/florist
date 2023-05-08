@@ -1,10 +1,7 @@
 import { UploadFile } from 'antd'
 import { IImage } from './image'
+import { ICategory } from './category'
 
-export interface ICategory {
-   _id: number
-   name: string
-}
 
 export interface IProduct {
    _id: string
@@ -24,7 +21,7 @@ export interface IInputProduct {
 
 export interface IDataResponse {
    message: string
-   products: {
+   data: {
       docs: IProduct[]
       hasNextPage: boolean
       hasPrevPage: boolean
