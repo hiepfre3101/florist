@@ -66,12 +66,11 @@ const data = [
       ]
    }
 ]
-const logoGreenLink = 'https://res.cloudinary.com/diqyzhuc2/image/upload/v1683469577/logo2_utvj2m.png'
 const Footer = (props: Props) => {
    return (
       <footer className='px-14 py-5 w-full grid grid-cols-6 bg-primary gap-10 '>
          <Link to='/' className='col-start-1 col-span-1 flex items-center justify-center'>
-            <img src={logoGreenLink} alt='img' className='h-auto w-[50%]' />
+            <img src={logoWhiteLink} alt='img' className='h-auto w-[100%]' />
          </Link>
          <div className='col-start-2 col-span-4 grid grid-cols-6'>
             {data.map((item, i) => (
