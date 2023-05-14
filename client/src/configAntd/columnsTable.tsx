@@ -23,7 +23,7 @@ export const columnsProduct = ({ onDelete }: agrColumns): ColumnsType<IProduct> 
          render: (_, { images }) => (
             <div className='flex gap-2'>
                {images.map((img, index) => (
-                  <img src={img?.url} key={index} alt='img' className='w-[20%] rounded-lg' />
+                  <img src={img?.url} key={index} alt='img' className='w-[10%] aspect-square rounded-lg' />
                ))}
             </div>
          )

@@ -4,11 +4,11 @@ import {
    PieChartOutlined,
    HomeOutlined,
    SearchOutlined,
-   ShoppingCartOutlined,
+   BellOutlined,
    AppstoreAddOutlined,
    EyeOutlined
 } from '@ant-design/icons'
-import { ConfigProvider, Dropdown, MenuProps, message } from 'antd'
+import { Button, ConfigProvider, Dropdown, MenuProps, message } from 'antd'
 import { Layout, Menu } from 'antd'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 
@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '../hooks/redux/hooks'
 import { authSlice, selectorUser } from '../auth/authSlice'
 import { itemsNavClient } from '../configAntd/navItems'
 import { getToken } from '../api/auth/auth'
+import { selectAuthStatus } from '../auth/authSlice'
 
 const { Content, Header, Sider } = Layout
 type MenuItem = Required<MenuProps>['items'][number]
@@ -52,6 +53,7 @@ type Props = {
 const AdminLayout = ({ logout }: Props) => {
    const [collapsed, setCollapsed] = useState(false)
    const { colorBgContainer, colorText, colorPrimary, colorLinkActive } = useMyToken()
+   const isLogin = useAppSelector(selectAuthStatus)
    const user = useAppSelector(selectorUser)
    const items = itemsNavClient({ logout })
    const dispatch = useAppDispatch()
@@ -100,10 +102,18 @@ const AdminLayout = ({ logout }: Props) => {
                <div className='flex w-full justify-end items-center px-10 h-full'>
                   <div className='flex gap-2 justify-evenly w-[14%] items-center'>
                      <SearchOutlined className='cursor-pointer text-xl' />
-                     <ShoppingCartOutlined className='cursor-pointer text-xl' />
-                     <Dropdown menu={{ items }} trigger={['click']}>
-                        <img src={user?.avatarDefault} alt='img' className='w-[20%] cursor-pointer' />
-                     </Dropdown>
+                     <BellOutlined className='cursor-pointer text-xl' />
+                     {isLogin ? (
+                        <Dropdown menu={{ items }} trigger={['click']}>
+                           <img src={user?.avatarDefault} alt='img' className='w-[20%] cursor-pointer' />
+                        </Dropdown>
+                     ) : (
+                        <Link to='/auth'>
+                           <button className='h-[50px] px-2 py-1 flex justify-center items-center rounded-md bg-red-400 text-white'>
+                              Sign In
+                           </button>
+                        </Link>
+                     )}
                   </div>
                </div>
             </Header>

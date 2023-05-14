@@ -13,7 +13,7 @@ const CategoryPage = () => {
          try {
             setIsLoading(true)
             const { data } = await getAllCategory()
-            const formatedCategories = data.categories.map((category: ICategory) => {
+            const formatedCategories = data.data.map((category: ICategory) => {
                return {
                   ...category,
                   key: category._id,

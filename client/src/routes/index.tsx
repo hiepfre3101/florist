@@ -13,6 +13,7 @@ import Flower from '../client/Flower'
 import AddHero from '../admin/heros/AddHero'
 import ListHero from '../admin/heros/ListHero'
 import AuthenForm from '../auth/AuthenForm'
+import Cart from '../components/Cart/Cart'
 
 interface IRoute {
    path: string
@@ -39,7 +40,10 @@ export const clientRoutes: IRoute[] = [
       path: '/auth',
       element: AuthenForm
    },
-   
+   {
+      path: '/cart',
+      element: Cart
+   }
 ]
 
 export const adminRoutes: IRoute[] = [

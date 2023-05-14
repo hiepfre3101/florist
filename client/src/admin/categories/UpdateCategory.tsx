@@ -16,14 +16,6 @@ const UpdateCategory = () => {
    const navigate = useNavigate()
    const [form] = Form.useForm()
    const { id } = useParams()
-   const layout = {
-      labelCol: {
-         span: 5
-      },
-      wrapperCol: {
-         span: 16
-      }
-   }
    useEffect(() => {
       ;(async () => {
          try {
@@ -52,9 +44,11 @@ const UpdateCategory = () => {
       <div className='w-full flex justify-center flex-col items-center'>
          <h2 className='p-5 font-semibold text-lg'>Update category</h2>
          <Form
+            labelCol={{ span: 5 }}
+            wrapperCol={{ span: 16 }}
+            layout='horizontal'
             form={form}
             name='update'
-            {...layout}
             size='large'
             className='w-1/2 flex flex-col items-center justify-center'
             initialValues={{ remember: true }}
@@ -72,7 +66,7 @@ const UpdateCategory = () => {
             >
                <Input />
             </Form.Item>
-            <Form.Item className='w-full' wrapperCol={{ offset: 8, span: 16 }}>
+            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                <ConfigProvider
                   theme={{
                      token: {
@@ -80,7 +74,7 @@ const UpdateCategory = () => {
                      }
                   }}
                >
-                  <Button type='primary' htmlType='submit' className='bg-red-400 w-1/2'>
+                  <Button type='primary' htmlType='submit' className='bg-red-400 absolute left-2/3'>
                      Submit
                   </Button>
                </ConfigProvider>

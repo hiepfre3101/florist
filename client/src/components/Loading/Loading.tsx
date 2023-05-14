@@ -8,7 +8,9 @@ const Loading = ({ sreenSize }: Props) => {
    const flowerIcon = <FlowerIcon className='spin' />
    return (
       <div
-         className={`flex justify-center items-center w-full h-full relative ${sreenSize === 'lg' && 'min-h-[1000px]'}`}
+         className={`flex justify-center items-center w-full h-full relative ${sreenSize === 'md' && 'min-h-[500px]'} ${
+            sreenSize === 'lg' && 'min-h-[1000px]'
+         }`}
       >
          <Spin
             size='large'

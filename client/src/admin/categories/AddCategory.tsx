@@ -61,7 +61,7 @@ const AddCategory = () => {
                      }
                   }}
                >
-                  <Button type='primary' htmlType='submit' className='bg-red-400 w-1/2'>
+                  <Button type='primary' htmlType='submit' className='bg-red-400 absolute left-2/3'>
                      Submit
                   </Button>
                </ConfigProvider>
