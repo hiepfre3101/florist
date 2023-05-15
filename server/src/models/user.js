@@ -12,6 +12,12 @@ const userSchema = new mongoose.Schema({
       ref: "image",
     },
   ],
+  orders: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "order",
+    },
+  ],
 });
 userSchema.plugin(mongoosePaginate);
 export default mongoose.model("User", userSchema);

@@ -1,7 +1,7 @@
 import Joi from "joi";
 
-export const categorySchema = Joi.object({
+export const typeSchema = Joi.object({
   name: Joi.string().required(),
-  type: Joi.string().required(),
+  subCategories: Joi.array(),
   products: Joi.array(),
 });

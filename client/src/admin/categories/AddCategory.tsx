@@ -1,16 +1,21 @@
 import { useState, useEffect } from 'react'
-import { Button, ConfigProvider, Form, Input, Select, message } from 'antd'
+import { Button, ConfigProvider, Form, Input, Radio, RadioChangeEvent, Select, message } from 'antd'
 import useMyToken from '../../hooks/useMyToken'
 import { useNavigate } from 'react-router-dom'
 import { addCategory } from '../../api/category/category'
+import Loading from '../../components/Loading/Loading'
+import { getAllType } from '../../api/type/type'
+import { ITypeOfProduct } from '../../interface/type'
 
 const onFinishFailed = (errorInfo: any) => {
    console.log('Failed:', errorInfo)
 }
 const AddCategory = () => {
+   const [types, setTypes] = useState<ITypeOfProduct[]>([])
    const { colorPrimary } = useMyToken()
    const [isLoading, setIsLoading] = useState(false)
    const navigate = useNavigate()
+   const [form] = Form.useForm()
    const layout = {
       labelCol: {
          span: 5
@@ -18,6 +23,20 @@ const AddCategory = () => {
       wrapperCol: {
          span: 16
       }
+   }
+   useEffect(() => {
+      ;(async () => {
+         try {
+            const { data } = await getAllType()
+            setTypes(data.data)
+         } catch (error) {
+            message.error('Cannot get types of product!')
+            console.log(error)
+         }
+      })()
+   }, [])
+   const handleChangeRadio = (e: RadioChangeEvent) => {
+      form.setFieldValue('type', e.target.value)
    }
    const onFinish = async (values: any) => {
       try {
@@ -30,10 +49,12 @@ const AddCategory = () => {
          console.log(error)
       }
    }
+   if (isLoading) return <Loading sreenSize='lg' />
    return (
       <div className='w-full flex justify-center flex-col items-center'>
          <h2 className='p-5 font-semibold text-lg'>Add category</h2>
          <Form
+            form={form}
             name='add'
             {...layout}
             size='large'
@@ -45,13 +66,29 @@ const AddCategory = () => {
          >
             <Form.Item
                validateTrigger={'onBlur'}
-               label={<label className='block'>Product Name</label>}
+               label={<label className='block'>Name</label>}
                hasFeedback
                className='w-full'
                name='name'
                rules={[{ required: true, message: 'Please input category name!' }]}
             >
                <Input />
+            </Form.Item>
+            <Form.Item
+               validateTrigger={'onBlur'}
+               label={<label className='block'>Type Of Product</label>}
+               hasFeedback
+               className='w-full'
+               name='type'
+               rules={[{ required: true, message: 'Please choose one general type product!' }]}
+            >
+               <Radio.Group onChange={handleChangeRadio}>
+                  {types?.map((type, i) => (
+                     <Radio key={i} value={type._id} className='uppercase'>
+                        {type.name}
+                     </Radio>
+                  ))}
+               </Radio.Group>
             </Form.Item>
             <Form.Item className='w-full' wrapperCol={{ offset: 8, span: 16 }}>
                <ConfigProvider

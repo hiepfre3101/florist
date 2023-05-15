@@ -10,8 +10,6 @@ import Test from '../admin/test'
 import NewPage from '../client/NewPage'
 import Bouquet from '../client/Bouquet'
 import Flower from '../client/Flower'
-import AddHero from '../admin/heros/AddHero'
-import ListHero from '../admin/heros/ListHero'
 import AuthenForm from '../auth/AuthenForm'
 import Cart from '../components/Cart/Cart'
 
@@ -78,13 +76,5 @@ export const adminRoutes: IRoute[] = [
    {
       path: '/admin/test',
       element: Test
-   },
-   {
-      path: '/admin/heros',
-      element: ListHero
-   },
-   {
-      path: '/admin/add-hero',
-      element: AddHero
    }
 ]

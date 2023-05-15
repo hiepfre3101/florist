@@ -1,4 +1,4 @@
-import { Button, ConfigProvider, Form, Input, Select, InputNumber, message } from 'antd'
+import { Button, ConfigProvider, Form, Input, Select, InputNumber, message, Radio, RadioChangeEvent } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -17,6 +17,8 @@ import FileImage from '../../components/Modal/ModalUpload/FileImage'
 import { getOneProduct } from '../../api/product/product'
 import { IUser } from '../../interface/user'
 import useTriggerUpload from '../../hooks/useTriggerUpload'
+import { getAllType } from '../../api/type/type'
+import { ITypeOfProduct } from '../../interface/type'
 
 const onFinishFailed = (errorInfo: any) => {
    console.log('Failed:', errorInfo)
@@ -26,7 +28,9 @@ const UpdateProduct = () => {
    const { colorPrimary } = useMyToken()
    const { isOpen, setIsOpen, handleCloseModal, handleOnAdd } = useTriggerUpload()
    const [isLoading, setIsLoading] = useState(false)
+   const [types, setTypes] = useState<ITypeOfProduct[]>([])
    const [categories, setCategories] = useState<ICategory[]>([])
+   console.log(categories)
    const navigate = useNavigate()
    const [form] = Form.useForm<IInputProduct>()
    const { id } = useParams()
@@ -48,9 +52,9 @@ const UpdateProduct = () => {
       ;(async () => {
          try {
             const {
-               data: { categories }
-            } = await getAllCategory()
-            setCategories(categories)
+               data: { data }
+            } = await getAllType()
+            setTypes(data)
          } catch (error) {
             console.log(error)
          }
@@ -60,19 +64,23 @@ const UpdateProduct = () => {
       ;(async () => {
          try {
             const {
-               data: { product }
+               data: { data }
             } = await getOneProduct(id)
-            const imagesList = product?.images.map((img: IImage) => img._id)
-            const newCateList = product?.categories.map((cate: ICategory) => cate._id)
+            const imagesList = data?.images.map((img: IImage) => img._id)
             const imagesOfUser = JSON.parse(localStorage.getItem('user') as string)?.images
             dispatch(imageSlice.actions.setImages(imagesOfUser))
             dispatch(imageSlice.actions.setImagesSelected(imagesList))
-            form.setFieldsValue({ ...product, categories: newCateList, images: imagesList })
+            form.setFieldsValue({ ...data, categories: [], images: imagesList })
          } catch (error) {
             console.log(error)
          }
       })()
    }, [])
+   const handleChangeRadio = (e: RadioChangeEvent) => {
+      form.setFieldValue('type', e.target.value)
+      const typeChecked = types.find((type) => type._id === e.target.value)
+      setCategories(typeChecked?.subCategories!)
+   }
    const onFinish = async (values: IInputProduct) => {
       try {
          setIsLoading(true)
@@ -133,12 +141,12 @@ const UpdateProduct = () => {
             >
                <div className='flex gap-2 flex-wrap'>
                   {images
-                     .filter((img: IImage) => {
+                     ?.filter((img: IImage) => {
                         if (imagesSelected.includes(img._id)) return img
                      })
                      .map((img: IImage) => (
                         <FileImage
-                           className='basis-[30%] h-[100px]'
+                           className='basis-[20%] h-[100px]'
                            key={img._id}
                            typeMask='sync'
                            src={img.url}
@@ -170,6 +178,22 @@ const UpdateProduct = () => {
             </Form.Item>
             <Form.Item
                validateTrigger={'onBlur'}
+               label={<label className='block'>Type Of Product</label>}
+               hasFeedback
+               className='w-full'
+               name='type'
+               rules={[{ required: true, message: 'Please choose one general type product!' }]}
+            >
+               <Radio.Group onChange={handleChangeRadio}>
+                  {types?.map((type, i) => (
+                     <Radio key={i} value={type._id} className='uppercase'>
+                        {type.name}
+                     </Radio>
+                  ))}
+               </Radio.Group>
+            </Form.Item>
+            <Form.Item
+               validateTrigger={'onBlur'}
                label={'Categories'}
                hasFeedback
                className='w-full'
@@ -182,7 +206,7 @@ const UpdateProduct = () => {
                   placeholder='Choose categories'
                   optionLabelProp='label'
                >
-                  {categories.map((category, index) => (
+                  {categories?.map((category, index) => (
                      <Option key={index} value={category._id} label={category.name}>
                         {category.name}
                      </Option>

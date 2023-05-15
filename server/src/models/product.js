@@ -4,6 +4,10 @@ const productSchema = new mongoose.Schema(
   {
     name: String,
     price: Number,
+    type: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "type",
+    },
     images: [
       {
         type: mongoose.Schema.Types.ObjectId,
