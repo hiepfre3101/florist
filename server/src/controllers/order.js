@@ -1,14 +1,13 @@
 import dotenv from "dotenv";
-import Product from "../models/product";
-import Category from "../models/category";
-import Type from "../models/type";
-import { productSchema } from "../schemas/product";
+import Order from "../models/order";
+import User from "../models/user";
+import { orderSchema } from "../schemas/order";
 dotenv.config();
 
 export const getAll = async (req, res) => {
   const {
     _limit = 10,
-    _sort = "name",
+    _sort = "createAt",
     _order = "ascend",
     _page = 1,
     _q = "",
@@ -16,21 +15,27 @@ export const getAll = async (req, res) => {
   const options = {
     sort: { [_sort]: _order === "descend" ? -1 : 1 },
     limit: _limit,
-    populate: ["categories", "images","type"],
+    populate: [
+      {
+        path: "products.product_id",
+        select: ["name", "price", "images"],
+      },
+      { path: "user", select: ["email", "name", "_id"] },
+    ],
     page: _page,
     options: { $text: { $search: _q } },
   };
   try {
-    const products = await Product.paginate({}, options);
-    if (products.length === 0) {
+    const orders = await Order.paginate({}, options);
+    if (orders.length === 0) {
       return res.status(404).json({
-        message: "Không có sản phẩm nào",
+        message: "Không có don hang nào",
         data: [],
       });
     }
     return res.json({
-      message: "Lấy danh sách sản phẩm thành công",
-      data: products,
+      message: "Lấy danh sách don hang thành công",
+      data: orders,
     });
   } catch (error) {
     return res.status(400).json({
@@ -65,39 +70,27 @@ export const getOne = async (req, res) => {
 };
 export const create = async (req, res) => {
   try {
-    const { error } = productSchema.validate(req.body);
+    const { error } = orderSchema.validate(req.body);
     if (error)
       return res.status(400).json({
         message: error.details[0].message,
       });
-    const product = await Product.create(req.body);
-    if (!product) {
+    const order = await Order.create({ status: "verify", ...req.body });
+    if (!order) {
       return res.status(404).json({
-        message: "Thêm sản phẩm không thành công",
+        message: "Dat hang không thành công",
       });
     }
-    product.categories.forEach(async (category) => {
-      try {
-        await Category.findByIdAndUpdate(category._id, {
-          $addToSet: { products: product._id },
-        });
-      } catch (error) {
-        return res.status(404).json({
-          message: error.message,
-        });
-      }
-    });
-    const typeUpdated = await Type.findByIdAndUpdate(req.body.type, {
-      $addToSet: { products: product._id },
+    await User.findByIdAndUpdate(req.body.user, {
+      $addToSet: { orders: order._id },
     });
     return res.json({
-      message: "Thêm sản phẩm thành công",
-      data: product,
-      type: typeUpdated,
+      message: "Dat hang thành công",
+      data: order,
     });
   } catch (error) {
     return res.status(400).json({
-      message: error,
+      message: error.message,
     });
   }
 };

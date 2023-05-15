@@ -1,7 +1,7 @@
 import { UploadFile } from 'antd'
 import { IImage } from './image'
 import { ICategory } from './category'
-
+import { ITypeOfProduct } from './type'
 
 export interface IProduct {
    _id: string
@@ -9,6 +9,7 @@ export interface IProduct {
    name: string
    images: IImage[]
    description: string
+   type: ITypeOfProduct
    categories: ICategory[]
 }
 export interface IInputProduct {
@@ -16,6 +17,7 @@ export interface IInputProduct {
    price: number
    description: string
    images: string[]
+   type: string
    categories: string[]
 }
 

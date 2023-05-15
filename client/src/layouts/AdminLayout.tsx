@@ -41,10 +41,6 @@ const itemsSidebar: MenuItem[] = [
    getItem('Categories', '5', <DesktopOutlined />, [
       getItem(<Link to='/admin/add-category'>Add category</Link>, '6'),
       getItem(<Link to='/admin/categories'>List categories</Link>, '7')
-   ]),
-   getItem('Hero Banners', '8', <AppstoreAddOutlined />, [
-      getItem(<Link to='/admin/add-hero'>Add Hero</Link>, '9'),
-      getItem(<Link to='/admin/heros'>List Hero</Link>, '10')
    ])
 ]
 type Props = {

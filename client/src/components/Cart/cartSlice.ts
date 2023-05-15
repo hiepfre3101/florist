@@ -37,6 +37,15 @@ export const cartSlice = createSlice({
          state.total = state.products.reduce((price, product) => {
             return product.price * product.quantity + price
          }, 0)
+      },
+      changeQuantity: (state, action) => {
+         const productExist = state.products.find((product) => product._id === action.payload._id)
+         if (productExist) {
+            productExist.quantity = action.payload.quantity
+            state.total = state.products.reduce((price, product) => {
+               return product.price * product.quantity + price
+            }, 0)
+         }
       }
    }
 })

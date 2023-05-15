@@ -4,12 +4,14 @@ import cors from "cors";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 
+import orderRouter from "./routes/order";
 import productRouter from "./routes/product";
 import authRouter from "./routes/auth";
 import categoryRouter from "./routes/category";
 import uploadRouter from "./routes/upload";
 import heroRouter from "./routes/hero";
 import userRouter from "./routes/user";
+import typesRouter from "./routes/type";
 
 dotenv.config();
 const app = express();
@@ -25,4 +27,6 @@ app.use("/api", categoryRouter);
 app.use("/api", uploadRouter);
 app.use("/api", heroRouter);
 app.use("/api", userRouter);
+app.use("/api", typesRouter);
+app.use("/api", orderRouter);
 export const viteNodeApp = app;

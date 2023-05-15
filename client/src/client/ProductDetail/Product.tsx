@@ -17,7 +17,7 @@ const Product = () => {
          try {
             setLoading(true)
             const { data } = await getOneProduct(idProduct)
-            setProduct(data.product)
+            setProduct(data.data)
             setLoading(false)
          } catch (error) {
             console.log(error)
@@ -30,7 +30,7 @@ const Product = () => {
       <div className='gap-32 mt-10 px-36 grid grid-cols-5 w-full pb-10'>
          <SlideProduct product={product} />
          <div className='col-start-4 col-span-2'>
-            {product.categories && <p className='text-gray'>{product?.categories[0]?.name}</p>}
+            {product?.type && <p className='text-gray'>{product?.type.name}</p>}
 
             <p className='text-2xl text-primary italic'>{product?.name}</p>
             <div className='flex gap-4 text-orangeH'>

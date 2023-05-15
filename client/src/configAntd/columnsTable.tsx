@@ -38,6 +38,14 @@ export const columnsProduct = ({ onDelete }: agrColumns): ColumnsType<IProduct> 
          key: 'price'
       },
       {
+         title: 'Type',
+         dataIndex: 'type',
+         key: 'type',
+         render: (_, { type }) => {
+            return <Tag color={'purple'}>{type && type.name}</Tag>
+         }
+      },
+      {
          title: 'Categories',
          key: 'categories',
          dataIndex: 'categories',
@@ -45,7 +53,7 @@ export const columnsProduct = ({ onDelete }: agrColumns): ColumnsType<IProduct> 
             <>
                {categories.map((category, index) => {
                   return (
-                     <Tag color={'cyan'} key={index}>
+                     <Tag color={'cyan'} key={index} className='mb-3'>
                         {category?.name}
                      </Tag>
                   )
@@ -62,7 +70,7 @@ export const columnsProduct = ({ onDelete }: agrColumns): ColumnsType<IProduct> 
                   <Button>Update</Button>
                </Link>
                <Popconfirm
-               okButtonProps={{className:"bg-orangeH"}}
+                  okButtonProps={{ className: 'bg-orangeH' }}
                   onConfirm={() => onDelete(record.key)}
                   title='Delete Item'
                   description='Do you want to delete this item ?'

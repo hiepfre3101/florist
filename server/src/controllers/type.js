@@ -1,22 +1,20 @@
 import dotenv from "dotenv";
-import Category from "../models/category";
 import Type from "../models/type";
-import { categorySchema } from "../schemas/category";
+import { typeSchema } from "../schemas/type";
 
 dotenv.config();
 
 export const getAll = async (req, res) => {
   try {
-    const categories = await Category.find().populate({ path: "type" });
-    if (categories.length === 0) {
-      return res.status(201).json({
+    const typesOfProduct = await Type.find().populate("subCategories");
+    if (typesOfProduct.length === 0) {
+      return res.status(404).json({
         message: "Không có danh muc nào",
-        data: [],
       });
     }
     return res.json({
       message: "Lấy danh sách sản phẩm thành công",
-      data: categories,
+      data: typesOfProduct,
     });
   } catch (error) {
     return res.status(400).json({
@@ -26,26 +24,21 @@ export const getAll = async (req, res) => {
 };
 export const create = async (req, res) => {
   try {
-    const { error } = categorySchema.validate(req.body);
+    const { error } = typeSchema.validate(req.body);
     if (error) {
       return res.status(400).json({
         message: error.details[0].message,
       });
     }
-
-    const category = await Category.create(req.body);
-    if (!category) {
+    const typeOfProduct = await Type.create(req.body);
+    if (!typeOfProduct) {
       return res.json({
         message: "Thêm danh mục không thành công",
       });
     }
-    const typeUpdated = await Type.findByIdAndUpdate(req.body.type, {
-      $addToSet: { subCategories: category._id },
-    });
     return res.json({
       message: "Thêm danh mục thành công",
-      category,
-      type: typeUpdated,
+      typeOfProduct,
     });
   } catch (error) {
     return res.status(400).json({
@@ -55,28 +48,24 @@ export const create = async (req, res) => {
 };
 export const update = async (req, res) => {
   try {
-    const { error } = categorySchema.validate(req.body);
+    const { error } = typeSchema.validate(req.body);
     if (error)
       return res.status(400).json({
         message: error.details[0].message,
       });
-    const category = await Category.findOneAndUpdate(
+    const typeOfProduct = await Type.findOneAndUpdate(
       { _id: req.params.id },
       req.body,
       { new: true }
     );
-    if (!category) {
+    if (!typeOfProduct) {
       return res.json({
-        message: "Cập nhật danh mục không thành công",
+        message: "Cập nhật sản phẩm không thành công",
       });
     }
-    const typeUpdated = await Type.findByIdAndUpdate(req.body.type, {
-      $addToSet: { subCategories: category._id },
-    });
     res.json({
-      message: "Cập nhật danh mục thành công",
-      category,
-      type: typeUpdated,
+      message: "Cập nhật sản phẩm thành công",
+      typeOfProduct,
     });
   } catch (error) {
     return res.status(400).json({
@@ -86,17 +75,17 @@ export const update = async (req, res) => {
 };
 export const getOne = async (req, res) => {
   try {
-    const category = await Category.findById({ _id: req.params.id }).populate(
+    const typeOfProduct = await Type.findById({ _id: req.params.id }).populate(
       "products"
     );
-    if (!category) {
+    if (!typeOfProduct) {
       return res.json({
-        message: "Không tìm thấy danh mục",
+        message: "Không tìm thấy danh muc",
       });
     }
     res.json({
-      message: "Lấy danh mục thành công",
-      category,
+      message: "Lấy danh muc thành công",
+      typeOfProduct,
     });
   } catch (error) {
     return res.status(400).json({
@@ -106,7 +95,7 @@ export const getOne = async (req, res) => {
 };
 export const remove = async (req, res) => {
   try {
-    const category = await Category.deleteOne(
+    const typeOfProduct = await Type.deleteOne(
       { _id: req.params.id },
       { new: true }
     );
@@ -116,8 +105,8 @@ export const remove = async (req, res) => {
     //     });
     // }
     res.json({
-      message: "Xóa danh mục thành công",
-      category,
+      message: "Xóa sản phẩm thành công",
+      typeOfProduct,
     });
   } catch (error) {
     return res.status(400).json({
