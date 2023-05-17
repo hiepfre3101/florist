@@ -30,7 +30,7 @@ const HomePage = () => {
    }, [])
    if (isLoading) return <Loading sreenSize='lg' />
    return (
-      <div className='w-full'>
+      <div className='w-full min-h-[500px]'>
          <Hero />
          <OutstandProducts />
       </div>

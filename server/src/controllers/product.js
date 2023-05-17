@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
-import Product from "../models/product";
-import Category from "../models/category";
-import Type from "../models/type";
-import { productSchema } from "../schemas/product";
+import Product from "../models/product.js";
+import Category from "../models/category.js";
+import Type from "../models/type.js";
+import { productSchema } from "../schemas/product.js";
 dotenv.config();
 
 export const getAll = async (req, res) => {

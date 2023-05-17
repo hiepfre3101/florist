@@ -1,9 +1,9 @@
 import { Router } from "express";
 import multer from "multer";
-import cloudinary from "../config/cloudinary";
-import { deleteImage, uploadImage } from "../controllers/upload";
+import cloudinary from "../config/cloudinary.js";
+import { deleteImage, uploadImage } from "../controllers/upload.js";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
-import { checkPermission } from "../middleware/checkPermission";
+import { checkPermission } from "../middleware/checkPermission.js";
 const router = Router();
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,

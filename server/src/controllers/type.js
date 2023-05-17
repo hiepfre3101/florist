@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
-import Type from "../models/type";
-import { typeSchema } from "../schemas/type";
+import Type from "../models/type.js";
+import { typeSchema } from "../schemas/type.js";
 
 dotenv.config();
 

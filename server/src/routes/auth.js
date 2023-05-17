@@ -4,8 +4,8 @@ import {
   createAccount,
   getToken,
   signin,
-} from "../controllers/auth";
-import { checkPermission } from "../middleware/checkPermission";
+} from "../controllers/auth.js";
+import { checkPermission } from "../middleware/checkPermission.js";
 
 const router = express.Router();
 

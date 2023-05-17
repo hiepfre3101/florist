@@ -1,9 +1,9 @@
-import User from "../models/user";
+import User from "../models/user.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { signupSchema, signinSchema } from "../schemas/auth";
+import { signupSchema, signinSchema } from "../schemas/auth.js";
 import bcrypt from "bcryptjs";
-import { setCookie } from "../tools/createCookie";
+import { setCookie } from "../tools/createCookie.js";
 
 dotenv.config();
 
@@ -45,7 +45,7 @@ export const createAccount = async (req, res) => {
     return res.json({
       message: "Tao tai khoan thành công",
       accessToken: token,
-      user,
+      data: user,
       status: "success",
     });
   } catch (error) {
