@@ -1,6 +1,6 @@
 import express from "express";
-import { create, getAll, getOne, remove, update } from "../controllers/type";
-import { checkPermission } from "../middleware/checkPermission";
+import { create, getAll, getOne, remove, update } from "../controllers/type.js";
+import { checkPermission } from "../middleware/checkPermission.js";
 
 const typesRouter = express.Router();
 

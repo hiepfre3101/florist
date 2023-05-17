@@ -1,5 +1,5 @@
-import Hero from "../models/hero";
-import { heroSchema } from "../schemas/hero";
+import Hero from "../models/hero.js";
+import { heroSchema } from "../schemas/hero.js";
 
 export const getAll = async (req, res) => {
   try {

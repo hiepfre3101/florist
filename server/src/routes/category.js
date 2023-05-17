@@ -5,8 +5,8 @@ import {
   getOne,
   remove,
   update,
-} from "../controllers/category";
-import { checkPermission } from "../middleware/checkPermission";
+} from "../controllers/category.js";
+import { checkPermission } from "../middleware/checkPermission.js";
 
 const router = express.Router();
 

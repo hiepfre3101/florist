@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { getAll, getOne } from "../controllers/user";
-import { checkPermission } from "../middleware/checkPermission";
+import { getAll, getOne } from "../controllers/user.js";
+import { checkPermission } from "../middleware/checkPermission.js";
 
 const userRouter = Router();
 

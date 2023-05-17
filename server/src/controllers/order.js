@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
-import Order from "../models/order";
-import User from "../models/user";
-import { orderSchema } from "../schemas/order";
+import Order from "../models/order.js";
+import User from "../models/user.js";
+import { orderSchema } from "../schemas/order.js";
 dotenv.config();
 
 export const getAll = async (req, res) => {

@@ -1,6 +1,6 @@
-import cloudinary from "../config/cloudinary";
-import Image from "../models/image";
-import User from "../models/user";
+import cloudinary from "../config/cloudinary.js";
+import Image from "../models/image.js";
+import User from "../models/user.js";
 
 export const uploadImage = async (req, res) => {
   const files = req.files;

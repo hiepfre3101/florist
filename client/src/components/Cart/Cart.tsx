@@ -1,16 +1,54 @@
-import React from 'react'
-import { useAppSelector } from '../../hooks/redux/hooks'
-import { productSelector, totalSelector } from './cartSlice'
+import { useEffect, useState } from 'react'
+import { useAppDispatch, useAppSelector } from '../../hooks/redux/hooks'
+import { cartSlice, haveNewSelector, productSelector, totalSelector } from './cartSlice'
 import ProductCart from './ProductCart'
-import { Link } from 'react-router-dom'
-import { Collapse, Input } from 'antd'
-
+import { Link, useNavigate } from 'react-router-dom'
+import { Button, Collapse, Input, message } from 'antd'
+import { IOrder } from '../../interface/order'
+import { createOrder } from '../../api/order/order'
+import { socket } from '../../socket/config'
 type Props = {}
 
 const Cart = (props: Props) => {
+   const dispatch = useAppDispatch()
+   const [loadingBtn, setLoadingBtn] = useState(false)
    const products = useAppSelector(productSelector)
+   const navigate = useNavigate()
    const total = useAppSelector(totalSelector)
+   const haveNew = useAppSelector(haveNewSelector)
    const { Panel } = Collapse
+
+   const resetCart = () => {
+      dispatch(cartSlice.actions.setCart([]))
+      localStorage.removeItem('cart')
+   }
+   const handleCheckout = async () => {
+      setLoadingBtn(true)
+      const productListSumbit = products.map((product) => ({ product_id: product._id, quantity: product.quantity }))
+      const userExist = localStorage.getItem('user')
+      let userId
+      if (!userExist) {
+         navigate('/auth')
+         return
+      }
+      userId = JSON.parse(userExist!)._id as string
+      try {
+         const dataSubmit: IOrder = {
+            total,
+            user: userId,
+            products: productListSumbit
+         }
+         const { data } = await createOrder(dataSubmit)
+         resetCart()
+         dispatch(cartSlice.actions.setHaveNew(!haveNew))
+         setLoadingBtn(false)
+         message.info(data.message)
+      } catch (error) {
+         setLoadingBtn(false)
+         message.error('Failed to create order!')
+         console.log(error)
+      }
+   }
    return (
       <div className='min-h-[800px] pt-10 px-40'>
          <p className='text-[3rem] text-primary'>Cart</p>
@@ -52,7 +90,13 @@ const Cart = (props: Props) => {
                         <p className='text-3xl text-greenY'>${total}</p>
                         <p className='text-greenY'>0%</p>
                      </div>
-                     <button className='flex-1 bg-greenY text-white p-2'>Checkout</button>
+                     <Button
+                        loading={loadingBtn}
+                        onClick={handleCheckout}
+                        className='flex-1 bg-greenY text-white py-5 flex justify-center items-center  hover:!border-greenY hover:!text-white font-vollkorn rounded-none '
+                     >
+                        Checkout
+                     </Button>
                   </div>
                </div>
             ) : (

@@ -23,7 +23,7 @@ const Product = () => {
             console.log(error)
          }
       })()
-   }, [])
+   }, [idProduct])
 
    if (loading) return <Loading sreenSize='md' />
    return (

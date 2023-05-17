@@ -58,7 +58,7 @@ function App() {
                      </FormContextProvider>
                   }
                >
-                  <Route index element={<HomePage />}></Route>
+                  <Route index element={<HomePage />} path='/'></Route>
                   {clientRoutes.map((route, index) => {
                      const Page = route.element
                      return <Route key={index} path={route.path} element={<Page />}></Route>

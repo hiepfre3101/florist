@@ -1,11 +1,13 @@
 import { useState } from 'react'
-import { Button, Form, Input } from 'antd'
+import { Button, Form, Input, message } from 'antd'
 import Loading from '../components/Loading/Loading'
 import { signup } from '../api/auth/auth'
 import { useNavigate } from 'react-router-dom'
 import ErrorSpan from '../components/ErrorSpan'
 import FooterForm from './components/FooterForm'
 import Label from './components/Label'
+import { useAppDispatch } from '../hooks/redux/hooks'
+import { authSlice } from './authSlice'
 type Props = { status: 'sign in' | 'sign up'; onChangeStatus: (s: 'sign in' | 'sign up') => void }
 
 interface IInputSignup {
@@ -20,9 +22,11 @@ const Signup = ({ status, onChangeStatus }: Props) => {
    const [formError, setErrorForm] = useState('')
    const navigate = useNavigate()
    const [form] = Form.useForm()
+   const dispatch = useAppDispatch()
    const onFinish = async (values: IInputSignup) => {
       try {
          setIsLoading(true)
+         dispatch(authSlice.actions.login(false))
          const user = await signup(values)
          setIsLoading(false)
          if (user) {
@@ -34,10 +38,12 @@ const Signup = ({ status, onChangeStatus }: Props) => {
             }
          }
       } catch (error) {
+         setIsLoading(false)
+         message.error('Somethings wrong!')
          console.log(error)
       }
    }
-   if (isLoading) return <Loading sreenSize='lg'/>
+   if (isLoading) return <Loading sreenSize='lg' />
    return (
       <div className='flex flex-col  items-start w-[30%] h-auto aspect-square'>
          <p className='text-primary text-[3rem]'>Sign up</p>

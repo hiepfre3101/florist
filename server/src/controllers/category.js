@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
-import Category from "../models/category";
-import Type from "../models/type";
-import { categorySchema } from "../schemas/category";
+import Category from "../models/category.js";
+import Type from "../models/type.js";
+import { categorySchema } from "../schemas/category.js";
 
 dotenv.config();
 

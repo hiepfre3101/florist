@@ -1,7 +1,7 @@
 import express from "express";
 
-import { create, getOne, getAll, remove, update } from "../controllers/product";
-import { checkPermission } from "../middleware/checkPermission";
+import { create, getOne, getAll, remove, update } from "../controllers/product.js";
+import { checkPermission } from "../middleware/checkPermission.js";
 
 const router = express.Router();
 

@@ -3,11 +3,12 @@ import { ShoppingCartOutlined, SearchOutlined } from '@ant-design/icons'
 import { Badge, MenuProps, theme } from 'antd'
 import { Dropdown, Space } from 'antd'
 
+import { socket } from '../../socket/config'
 import { useAppDispatch, useAppSelector } from '../../hooks/redux/hooks'
 import { selectAuthStatus, selectorUser } from '../../auth/authSlice'
 import { itemsNavClient } from '../../configAntd/navItems'
 import React, { useEffect } from 'react'
-import { productSelector, cartSlice, totalSelector } from '../Cart/cartSlice'
+import { productSelector, cartSlice, totalSelector, haveNewSelector } from '../Cart/cartSlice'
 import { itemsCart } from '../../configAntd/itemsCart'
 
 type Props = {
@@ -21,6 +22,7 @@ const Header = ({ logout }: Props) => {
    const items = itemsNavClient({ logout })
    const products = useAppSelector(productSelector)
    const total = useAppSelector(totalSelector)
+   const haveNew = useAppSelector(haveNewSelector)
    const { token } = theme.useToken()
    const dropdownMenuStyle = {
       backgroundColor: token.colorBgElevated,
@@ -28,6 +30,19 @@ const Header = ({ logout }: Props) => {
       boxShadow: token.boxShadowSecondary
    }
    const dispatch = useAppDispatch()
+   useEffect(() => {
+      socket.open()
+      socket.on('connect', () => {
+         console.log('connected')
+      })
+      socket.emit('newOrder', { data: user.name })
+      socket.on('newOrder', (dataFromSer) => {
+         console.log(dataFromSer.data)
+      })
+      return () => {
+         socket.disconnect()
+      }
+   }, [haveNew])
    useEffect(() => {
       const cartExist = localStorage.getItem('cart')
       if (cartExist) {
