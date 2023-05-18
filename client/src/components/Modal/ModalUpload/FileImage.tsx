@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Image } from 'antd'
 
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux/hooks'
-import { imageSlice, listOfIdMongoSelector } from './imageSlice'
+import { imageSlice, listOfIdMongoSelector } from '../../../slices/imageSlice'
 import MaskImage from '../../Mask/MaskImage'
 type Props = {
    src: string

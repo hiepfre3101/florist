@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import { getToken } from '../api/auth/auth'
 import { useAppDispatch } from '../hooks/redux/hooks'
-import { authSlice } from '../auth/authSlice'
+import { authSlice } from '../slices/authSlice'
 import { useLogout } from '../App'
 const Dashboard = () => {
    const { logout } = useLogout()

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { message } from 'antd'
 
-import { authSlice } from '../../auth/authSlice'
+import { authSlice } from '../../slices/authSlice'
 import { useAppDispatch } from '../../hooks/redux/hooks'
 import Loading from '../../components/Loading/Loading'
 import { useLogout } from '../../App'

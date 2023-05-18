@@ -1,21 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { RootState } from '../../store/store'
-import { ICart } from '../../interface/cart'
+import { RootState } from '../store/store'
+import { ICart } from '../interface/cart'
 
 const products = localStorage.getItem('cart') !== null ? JSON.parse(localStorage.getItem('cart')!) : []
 const initState: ICart = {
    products,
-   total: 0,
-   haveNew:false
+   total: 0
 }
 
 export const cartSlice = createSlice({
    name: 'cart',
    initialState: initState,
    reducers: {
-      setHaveNew:(state,action)=>{
-         state.haveNew = action.payload
-      },
       setCart: (state, action) => {
          state.products = action.payload
          state.total = state.products.reduce((price, product) => {
@@ -53,7 +49,6 @@ export const cartSlice = createSlice({
       }
    }
 })
-export const haveNewSelector = (state: RootState) => state.cart.haveNew
 export const totalSelector = (state: RootState) => state.cart.total
 export const productSelector = (state: RootState) => state.cart.products
 export const priceProductSelector = (state: RootState) => {

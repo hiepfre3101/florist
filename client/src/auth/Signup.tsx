@@ -7,7 +7,7 @@ import ErrorSpan from '../components/ErrorSpan'
 import FooterForm from './components/FooterForm'
 import Label from './components/Label'
 import { useAppDispatch } from '../hooks/redux/hooks'
-import { authSlice } from './authSlice'
+import { authSlice } from '../slices/authSlice'
 type Props = { status: 'sign in' | 'sign up'; onChangeStatus: (s: 'sign in' | 'sign up') => void }
 
 interface IInputSignup {

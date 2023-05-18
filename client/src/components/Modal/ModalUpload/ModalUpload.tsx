@@ -3,7 +3,7 @@ import { CloseOutlined } from '@ant-design/icons'
 import { Form, UploadFile, message, Modal, Button } from 'antd'
 
 import { useAppSelector, useAppDispatch } from '../../../hooks/redux/hooks'
-import { imageSlice, imagesSelector, listOfIdMongoSelector } from './imageSlice'
+import { imageSlice, imagesSelector, listOfIdMongoSelector } from '../../../slices/imageSlice'
 import ButtonUpLoad from '../../ButtonUpLoad/ButtonUpLoad'
 import Loading from '../../Loading/Loading'
 import { uploadImage } from '../../../api/upload/uploadImage'

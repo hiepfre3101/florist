@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../hooks/redux/hooks'
-import { cartSlice, haveNewSelector, productSelector, totalSelector } from './cartSlice'
+import { cartSlice, productSelector, totalSelector } from '../../slices/cartSlice'
 import ProductCart from './ProductCart'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button, Collapse, Input, message } from 'antd'
 import { IOrder } from '../../interface/order'
 import { createOrder } from '../../api/order/order'
-import { socket } from '../../socket/config'
+import { adminSocket, socket } from '../../socket/config'
 type Props = {}
 
 const Cart = (props: Props) => {
@@ -15,7 +15,6 @@ const Cart = (props: Props) => {
    const products = useAppSelector(productSelector)
    const navigate = useNavigate()
    const total = useAppSelector(totalSelector)
-   const haveNew = useAppSelector(haveNewSelector)
    const { Panel } = Collapse
 
    const resetCart = () => {
@@ -39,8 +38,9 @@ const Cart = (props: Props) => {
             products: productListSumbit
          }
          const { data } = await createOrder(dataSubmit)
+         adminSocket.emit('newOrder', { data: userId })
+         socket.emit('newOrder', { data: userId })
          resetCart()
-         dispatch(cartSlice.actions.setHaveNew(!haveNew))
          setLoadingBtn(false)
          message.info(data.message)
       } catch (error) {

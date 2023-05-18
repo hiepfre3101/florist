@@ -2,7 +2,7 @@ import React from 'react'
 import { IProduct } from '../../interface/product'
 import { CloseOutlined } from '@ant-design/icons'
 import { useAppDispatch } from '../../hooks/redux/hooks'
-import { cartSlice } from './cartSlice'
+import { cartSlice } from '../../slices/cartSlice'
 import { InputNumber } from 'antd'
 import { useNavigate } from 'react-router-dom'
 type Props = {

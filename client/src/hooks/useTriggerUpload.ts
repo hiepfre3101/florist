@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from './redux/hooks'
-import { imageSlice, listOfIdMongoSelector } from '../components/Modal/ModalUpload/imageSlice'
+import { imageSlice, listOfIdMongoSelector } from '../slices/imageSlice'
 
 const useTriggerUpload = () => {
    const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -14,7 +14,7 @@ const useTriggerUpload = () => {
       dispatch(imageSlice.actions.pushImagesSelected(listId))
       handleCloseModal()
    }
-   return { isOpen,setIsOpen, handleCloseModal, handleOnAdd }
+   return { isOpen, setIsOpen, handleCloseModal, handleOnAdd }
 }
 
 export default useTriggerUpload

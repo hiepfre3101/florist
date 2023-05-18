@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
-import authReducer from '../auth/authSlice'
-import imageSlice from '../components/Modal/ModalUpload/imageSlice'
-import cartSlice from '../components/Cart/cartSlice'
+import authReducer from '../slices/authSlice'
+import imageReducer from '../slices/imageSlice'
+import cartReducer from '../slices/cartSlice'
 export const store = configureStore({
    reducer: {
       auth: authReducer,
-      images: imageSlice,
-      cart: cartSlice
+      images: imageReducer,
+      cart: cartReducer
    }
 })
 

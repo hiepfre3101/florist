@@ -3,7 +3,7 @@ import { RestOutlined } from '@ant-design/icons'
 import { Popconfirm, message } from 'antd'
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux/hooks'
-import { imageSlice, imagesSelectedSelector, imagesSelector } from '../Modal/ModalUpload/imageSlice'
+import { imageSlice, imagesSelectedSelector, imagesSelector } from '../../slices/imageSlice'
 import { deleteImage } from '../../api/upload/deleteImage'
 type Props = {
    publicId: string
