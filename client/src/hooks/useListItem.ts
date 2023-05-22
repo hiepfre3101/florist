@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react'
 
 interface IProps {
    getList: ({}: any) => Promise<AxiosResponse<any, any>>
-   options: {}
+   options?: {}
 }
 const useListItem = <T>({ getList, options }: IProps) => {
    const [data, setData] = useState<T>([] as T)
-   const [loading, setLoading] = useState<boolean>(false)
+   const [loading, setLoading] = useState<boolean>(true)
    useEffect(() => {
       ;(async () => {
          try {

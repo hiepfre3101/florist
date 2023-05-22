@@ -13,6 +13,7 @@ import categoryRouter from "./routes/category.js";
 import uploadRouter from "./routes/upload.js";
 import userRouter from "./routes/user.js";
 import typesRouter from "./routes/type.js";
+import cartRouter from "./routes/cart.js";
 
 dotenv.config();
 mongoose.connect(process.env.DB_URL);
@@ -53,4 +54,5 @@ app.use("/api", uploadRouter);
 app.use("/api", userRouter);
 app.use("/api", typesRouter);
 app.use("/api", orderRouter);
+app.use("/api", cartRouter);
 httpServer.listen(process.env.PORT);

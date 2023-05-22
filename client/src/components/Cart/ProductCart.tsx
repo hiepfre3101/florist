@@ -42,9 +42,11 @@ const ProductCart = ({ product, type }: Props) => {
                   onChange={handleChangeQuantity}
                />
             )}
-            <p className='font-semibold ml-10'>
-               x<span className='text-xl'>{product.quantity}</span>
-            </p>
+            {type === 'checkout' && (
+               <p className='font-semibold ml-10'>
+                  x<span className='text-xl'>{product.quantity}</span>
+               </p>
+            )}
             <div>
                <button
                   className={`w-[20px] h-[20px] z-50  flex justify-center items-center rounded-full absolute right-1  top-3 ${

@@ -8,6 +8,7 @@ import { useLogout } from '../../App'
 import { getToken } from '../../api/auth/auth'
 import OutstandProducts from './OutstandProducts'
 import Hero from './Hero'
+import CarouselProduct from '../../components/CarouselProduct/CarouselProduct'
 const HomePage = () => {
    const { logout } = useLogout()
    const [isLoading, setIsLoading] = useState<boolean>(false)

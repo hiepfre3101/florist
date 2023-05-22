@@ -67,7 +67,7 @@ const Header = ({ logout }: Props) => {
          <div className='flex gap-4 justify-end w-[20%] items-center text-greenY'>
             <SearchOutlined className='cursor-pointer text-xl' />
             <BellOutlined className='cursor-pointer text-xl' />
-            <Link to='/cart'>
+            <Link to='/cart' >
                <Dropdown
                   menu={{ items: itemInCart }}
                   trigger={['hover']}
@@ -88,8 +88,7 @@ const Header = ({ logout }: Props) => {
                      </div>
                   )}
                >
-                  <Badge count={products.length} offset={[1, 1]} size='small'>
-                     {' '}
+                  <Badge count={products.length} offset={[1, 7]} size='small' color='#ff9c60'>
                      <ShoppingCartOutlined className='cursor-pointer text-2xl text-greenY' />
                   </Badge>
                </Dropdown>

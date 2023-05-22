@@ -18,22 +18,9 @@ export const cartSlice = createSlice({
             return product.price * product.quantity + price
          }, 0)
       },
-      addCart: (state, action) => {
-         const productAdding = state.products.find((product) => product._id === action.payload?._id)
-         if (productAdding) {
-            productAdding.quantity = action.payload?.quantity + productAdding.quantity
-         } else {
-            state.products.push(action.payload)
-         }
-         state.total = state.products.reduce((price, product) => {
-            return product.price * product.quantity + price
-         }, 0)
-         localStorage.setItem('cart', JSON.stringify(state.products))
-      },
       removeItem: (state, action) => {
          const listProduct = state.products.filter((product) => product._id !== action.payload)
          state.products = listProduct
-         localStorage.setItem('cart', JSON.stringify(listProduct))
          state.total = state.products.reduce((price, product) => {
             return product.price * product.quantity + price
          }, 0)

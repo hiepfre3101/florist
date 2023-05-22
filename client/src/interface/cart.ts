@@ -5,3 +5,4 @@ export type ICart = {
    products: ProductInCart[],
    total:number,
 }
+ 
