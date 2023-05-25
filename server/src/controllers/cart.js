@@ -27,12 +27,12 @@ export const getAll = async (req, res) => {
 }
 const addProduct = async (cartExist, productAdd, res) => {
    try {
-      const productExist = cartExist.products.find((product) => product.productId === productAdd._id)
+      const productExist = cartExist.products.find((product) => product.productId === productAdd.productId)
       if (productExist) {
          productExist.quantity += productAdd.quantity
-         productExist.totalAmount += productAdd.quantity * productAdd.price
-         cartExist.products.filter((product) => product._id !== productExist._id).push(productExist)
+         cartExist.totalAmount += productAdd.quantity * productAdd.price
       } else {
+         cartExist.totalAmount += productAdd.quantity * productAdd.price
          cartExist.products.push(productAdd)
       }
       const cartUpdated = await Cart.findOneAndUpdate({ _id: cartExist._id }, cartExist, { new: true })
@@ -92,39 +92,13 @@ export const create = async (req, res) => {
       })
    }
 }
-export const update = async (req, res) => {
-   try {
-      const { error } = categorySchema.validate(req.body)
-      if (error)
-         return res.status(400).json({
-            message: error.details[0].message
-         })
-      const category = await Category.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
-      if (!category) {
-         return res.json({
-            message: 'Cập nhật danh mục không thành công'
-         })
-      }
-      const typeUpdated = await Type.findByIdAndUpdate(req.body.type, {
-         $addToSet: { subCategories: category._id }
-      })
-      res.json({
-         message: 'Cập nhật danh mục thành công',
-         category,
-         type: typeUpdated
-      })
-   } catch (error) {
-      return res.status(400).json({
-         message: error.message
-      })
-   }
-}
 export const getOne = async (req, res) => {
    try {
       const cart = await Cart.findOne({ userId: req.params.id })
       if (!cart) {
          return res.json({
-            message: 'Không tìm thấy giỏ hàng'
+            message: 'Không tìm thấy giỏ hàng',
+            data: []
          })
       }
       res.json({
@@ -139,19 +113,31 @@ export const getOne = async (req, res) => {
 }
 export const removeProduct = async (req, res) => {
    try {
-      const category = await Category.deleteOne({ _id: req.params.id }, { new: true })
-      // if (!product) {
-      //     return res.json({
-      //         message: "Xóa sản phẩm không thành công",
-      //     });
-      // }
+      const idUser = req.params.id
+      const { idProduct = '' } = req.query
+      const userExist = await User.findOne({ _id: idUser })
+      if (!userExist) {
+         return res.json({
+            message: 'Sign in please!'
+         })
+      }
+      const cart = await Cart.findOne({ userId: idUser })
+      const productsUpdated = cart.products.filter((product) => product.productId !== idProduct)
+      const totalUpdated = productsUpdated.reduce((total, product) => {
+         return (total += product.quantity * product.price)
+      }, 0)
+      const cartUpdated = await Cart.findOneAndUpdate(
+         { userId: idUser },
+         { $set: { products: productsUpdated, totalAmount: totalUpdated } },
+         { new: true }
+      )
       res.json({
-         message: 'Xóa danh mục thành công',
-         category
+         message: 'Xóa san pham thành công',
+         data: cartUpdated
       })
    } catch (error) {
       return res.status(400).json({
-         message: error
+         message: error.message
       })
    }
 }

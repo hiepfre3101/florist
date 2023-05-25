@@ -5,11 +5,11 @@ import { Dropdown, Space } from 'antd'
 
 import { socket } from '../../socket/config'
 import { useAppDispatch, useAppSelector } from '../../hooks/redux/hooks'
-import { selectAuthStatus, selectorUser } from '../../slices/authSlice'
+import { authSlice, selectAuthStatus, selectorUser } from '../../slices/authSlice'
 import { itemsNavClient } from '../../configAntd/navItems'
-import React, { useEffect } from 'react'
-import { productSelector, cartSlice, totalSelector } from '../../slices/cartSlice'
+import React, { useEffect, useMemo } from 'react'
 import { itemsCart } from '../../configAntd/itemsCart'
+import { useGetCartQuery } from '../../api-slices/cart.service'
 
 type Props = {
    logout: () => void
@@ -20,8 +20,7 @@ const Header = ({ logout }: Props) => {
    const isLogin = useAppSelector(selectAuthStatus)
    const user = useAppSelector(selectorUser)
    const items = itemsNavClient({ logout })
-   const products = useAppSelector(productSelector)
-   const total = useAppSelector(totalSelector)
+   const { data: cart } = useGetCartQuery(user._id, { skip: !user._id })
    const { token } = theme.useToken()
    const dropdownMenuStyle = {
       backgroundColor: token.colorBgElevated,
@@ -42,12 +41,13 @@ const Header = ({ logout }: Props) => {
       }
    }, [])
    useEffect(() => {
-      const cartExist = localStorage.getItem('cart')
-      if (cartExist) {
-         dispatch(cartSlice.actions.setCart(JSON.parse(cartExist)))
+      const userExist = localStorage.getItem('user')
+      if (userExist) {
+         dispatch(authSlice.actions.login(true))
+         dispatch(authSlice.actions.setUser(JSON.parse(userExist)))
       }
    }, [])
-   const itemInCart = itemsCart(products)
+   const itemInCart = useMemo(() => itemsCart(cart?.data?.products!), [cart])
    return (
       <header className='overflow-hidden w-full flex justify-between items-center py-1 px-14  z-30 text-primary bg-yellowW'>
          <Link to='/' className='w-[20%] flex items-center justify-center pb-2'>
@@ -67,7 +67,7 @@ const Header = ({ logout }: Props) => {
          <div className='flex gap-4 justify-end w-[20%] items-center text-greenY'>
             <SearchOutlined className='cursor-pointer text-xl' />
             <BellOutlined className='cursor-pointer text-xl' />
-            <Link to='/cart' >
+            <Link to='/cart'>
                <Dropdown
                   menu={{ items: itemInCart }}
                   trigger={['hover']}
@@ -80,7 +80,7 @@ const Header = ({ logout }: Props) => {
                         })}
                         <div className='flex justify-start items-center gap-10 font-vollkorn relative p-4'>
                            <p className='text-orangeH'>Total:</p>
-                           <p className='text-orangeH font-semibold text-lg'>${total}</p>
+                           <p className='text-orangeH font-semibold text-lg'>${cart?.data?.totalAmount}</p>
                            <Link to={'/cart'} className='absolute right-4 mb-2'>
                               <button className='bg-greenY p-2 text-white'>Check out</button>
                            </Link>
@@ -88,7 +88,7 @@ const Header = ({ logout }: Props) => {
                      </div>
                   )}
                >
-                  <Badge count={products.length} offset={[1, 7]} size='small' color='#ff9c60'>
+                  <Badge count={cart?.data?.products.length} offset={[1, 7]} size='small' color='#ff9c60'>
                      <ShoppingCartOutlined className='cursor-pointer text-2xl text-greenY' />
                   </Badge>
                </Dropdown>

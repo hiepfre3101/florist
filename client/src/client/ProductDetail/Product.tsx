@@ -3,9 +3,10 @@ import { IProduct } from '../../interface/product'
 import { useParams } from 'react-router-dom'
 import { getOneProduct } from '../../api/product/product'
 import SlideProduct from './SlideProduct'
-import { Button, Input, InputNumber, message, Rate } from 'antd'
+import { InputNumber, Rate } from 'antd'
 import Loading from '../../components/Loading/Loading'
 import useCartManipulation from '../../hooks/useCartManipulation'
+import { ProductInCart } from '../../interface/cart'
 const Product = () => {
    const { addToCart, quantity, setQuantity } = useCartManipulation()
    const { id: idProduct } = useParams()
@@ -50,7 +51,15 @@ const Product = () => {
                required
             />
             <button
-               onClick={() => addToCart(product, quantity)}
+               onClick={() =>
+                  addToCart({
+                     productId: product._id,
+                     price: product.price,
+                     image: product?.images[0].url,
+                     name: product.name,
+                     quantity
+                  } as ProductInCart)
+               }
                className='w-full bg-greenY text-white rounded-sm p-3 mt-10'
             >
                Add to bag

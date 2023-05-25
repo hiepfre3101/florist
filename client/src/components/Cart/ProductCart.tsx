@@ -1,33 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { IProduct } from '../../interface/product'
 import { CloseOutlined } from '@ant-design/icons'
 import { useAppDispatch } from '../../hooks/redux/hooks'
-import { cartSlice } from '../../slices/cartSlice'
 import { InputNumber } from 'antd'
 import { useNavigate } from 'react-router-dom'
+import { ProductInCart } from '../../interface/cart'
+import useCartManipulation from '../../hooks/useCartManipulation'
 type Props = {
-   product: IProduct & { quantity: number }
+   product: ProductInCart
    type: 'checkout' | 'hover'
 }
 
 const ProductCart = ({ product, type }: Props) => {
-   const dispatch = useAppDispatch()
    const navigate = useNavigate()
-   const handleRemoveProduct = (id: string) => {
-      dispatch(cartSlice.actions.removeItem(id))
-   }
-   const handleChangeQuantity = (value: number | null) => {
-      if (value !== null || value !== '') {
-         dispatch(cartSlice.actions.changeQuantity({ _id: product._id, quantity: value }))
-      }
-   }
+   const { removeProduct, handleChangeQuantity, isSend } = useCartManipulation()
    const goToProduct = () => {
-      if (type === 'hover') navigate(`/${product._id}`)
+      if (type === 'hover') navigate(`/${product.productId}`)
    }
    return (
       <div className='relative' onClick={goToProduct}>
          <div className='grid grid-cols-6 gap-2  relative mb-5 mt-5'>
-            <img src={product?.images[0]?.url} className='aspect-square' alt='img' />
+            <img src={product?.image} className='aspect-square' alt='img' />
             <div className='flex flex-col items-start col-span-2'>
                <p className='text-primary'>{product?.name}</p>
                <p className='text-greenY'>${product?.price}</p>
@@ -39,7 +32,8 @@ const ProductCart = ({ product, type }: Props) => {
                   defaultValue={product?.quantity}
                   keyboard={true}
                   required
-                  onChange={handleChangeQuantity}
+                  onChange={(value) => handleChangeQuantity({ value: value as number }, product.productId)}
+                  disabled={isSend}
                />
             )}
             {type === 'checkout' && (
@@ -54,7 +48,7 @@ const ProductCart = ({ product, type }: Props) => {
                         ? 'p-4 hover:underline hover:bg-none text-primary'
                         : 'hover:bg-[rgba(0,0,0,0.1)]'
                   } `}
-                  onClick={() => handleRemoveProduct(product?._id)}
+                  onClick={() => removeProduct(product?.productId)}
                >
                   {type === 'checkout' ? 'Remove' : <CloseOutlined className='text-primary' />}
                </button>

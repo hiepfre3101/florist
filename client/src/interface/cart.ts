@@ -1,8 +1,11 @@
 import { IProduct } from './product'
 
-export type ProductInCart = IProduct & { quantity: number }
+export type ProductInCart = { productId: string; name: string; price: number; image: string; quantity: number }
 export type ICart = {
-   products: ProductInCart[],
-   total:number,
+   products: ProductInCart[]
+   totalAmount: number
 }
- 
+export type CartResponse = {
+   message: string
+   data: ICart
+}
