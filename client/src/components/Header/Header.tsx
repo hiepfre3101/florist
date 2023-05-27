@@ -10,6 +10,7 @@ import { itemsNavClient } from '../../configAntd/navItems'
 import React, { useEffect, useMemo } from 'react'
 import { itemsCart } from '../../configAntd/itemsCart'
 import { useGetCartQuery } from '../../api-slices/cart.service'
+import { selectorToken } from '../../slices/authSlice'
 
 type Props = {
    logout: () => void
@@ -22,6 +23,7 @@ const Header = ({ logout }: Props) => {
    const items = itemsNavClient({ logout })
    const { data: cart } = useGetCartQuery(user._id, { skip: !user._id })
    const { token } = theme.useToken()
+   const accessToken = useAppSelector(selectorToken)
    const dropdownMenuStyle = {
       backgroundColor: token.colorBgElevated,
       borderRadius: token.borderRadiusLG,
@@ -45,8 +47,11 @@ const Header = ({ logout }: Props) => {
       if (userExist) {
          dispatch(authSlice.actions.login(true))
          dispatch(authSlice.actions.setUser(JSON.parse(userExist)))
+      } else {
+         dispatch(authSlice.actions.login(false))
+         dispatch(authSlice.actions.setUser({}))
       }
-   }, [])
+   }, [accessToken])
    const itemInCart = useMemo(() => itemsCart(cart?.data?.products!), [cart])
    return (
       <header className='overflow-hidden w-full flex justify-between items-center py-1 px-14  z-30 text-primary bg-yellowW'>

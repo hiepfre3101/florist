@@ -8,13 +8,14 @@ import { createOrder } from '../../api/order/order'
 import { adminSocket, socket } from '../../socket/config'
 import { useGetCartQuery } from '../../api-slices/cart.service'
 import { selectorUser } from '../../slices/authSlice'
+import useCartManipulation from '../../hooks/useCartManipulation'
+import Loading from '../Loading/Loading'
 type Props = {}
 
 const Cart = (props: Props) => {
-   const dispatch = useAppDispatch()
    const [loadingBtn, setLoadingBtn] = useState(false)
    const { _id } = useAppSelector(selectorUser)
-   const { data: cart } = useGetCartQuery(_id, { skip: !_id })
+   const { data: cart, isFetching } = useGetCartQuery(_id, { skip: !_id })
    const navigate = useNavigate()
    const { Panel } = Collapse
 
@@ -66,43 +67,49 @@ const Cart = (props: Props) => {
             {cart?.data?.products?.length! > 0 ? (
                <div className='p-5 border border-gray  max-h-[500px] relative'>
                   <p className='uppercase text-primary'>order summary</p>
-                  <div className='border-t-[rgba(0,0,0,0.2)] pt-5 max-h-[300px] overflow-auto flex justify-between mt-10 border-t text-primary font-semibold'>
-                     <div className='w-[40%]'>
-                        <p>Subtotal:</p>
-                        <p>Coupon zip:</p>
-                     </div>
-                     <div className='flex-1 duration-500 flex flex-col items-end'>
-                        <p>${cart?.data?.totalAmount}</p>
-                        <Collapse size='small' ghost className=' w-full !p-0'>
-                           <Panel key={'1'} header={<p className='text-gray text-end'>Enter code</p>}>
-                              <div className='flex gap-2 w-full absolute right-0 px-2 pl-5'>
-                                 <Input />
-                                 <button className='p-2 font-vollkorn bg-primary text-white'>Calculate</button>
+                  {isFetching ? (
+                     <Loading />
+                  ) : (
+                     <div>
+                        <div className='border-t-[rgba(0,0,0,0.2)] pt-5 max-h-[300px] overflow-auto flex justify-between mt-10 border-t text-primary font-semibold'>
+                           <div className='w-[40%]'>
+                              <p>Subtotal:</p>
+                              <p>Coupon zip:</p>
+                           </div>
+                           <div className='flex-1 duration-500 flex flex-col items-end'>
+                              <p>${cart?.data?.totalAmount}</p>
+                              <Collapse size='small' ghost className=' w-full !p-0'>
+                                 <Panel key={'1'} header={<p className='text-gray text-end'>Enter code</p>}>
+                                    <div className='flex gap-2 w-full absolute right-0 px-2 pl-5'>
+                                       <Input />
+                                       <button className='p-2 font-vollkorn bg-primary text-white'>Calculate</button>
+                                    </div>
+                                 </Panel>
+                              </Collapse>
+                           </div>
+                        </div>
+                        <div className='border-t-[rgba(0,0,0,0.2)] left-0 p-5 flex gap-1 w-full justify-between absolute bottom-4 flex-wrap'>
+                           <div className='w-full flex justify-between'>
+                              <div className='w-[20%]'>
+                                 {' '}
+                                 <p className='text-3xl text-primary font-semibold'>Total:</p>
+                                 <p className='text-primary'>Discount:</p>
                               </div>
-                           </Panel>
-                        </Collapse>
-                     </div>
-                  </div>
-                  <div className='border-t-[rgba(0,0,0,0.2)] left-0 p-5 flex gap-1 w-full justify-between absolute bottom-4 flex-wrap'>
-                     <div className='w-full flex justify-between'>
-                        <div className='w-[20%]'>
-                           {' '}
-                           <p className='text-3xl text-primary font-semibold'>Total:</p>
-                           <p className='text-primary'>Discount:</p>
-                        </div>
-                        <div className='w-[60%] text-end'>
-                           <p className='text-3xl text-greenY'>${cart?.data?.totalAmount}</p>
-                           <p className='text-greenY'>0%</p>
+                              <div className='w-[60%] text-end'>
+                                 <p className='text-3xl text-greenY'>${cart?.data?.totalAmount}</p>
+                                 <p className='text-greenY'>0%</p>
+                              </div>
+                           </div>
+                           <Button
+                              loading={loadingBtn}
+                              onClick={handleCheckout}
+                              className='flex-1 bg-greenY text-white py-5 flex justify-center items-center  hover:!border-greenY hover:!text-white font-vollkorn rounded-none '
+                           >
+                              Checkout
+                           </Button>
                         </div>
                      </div>
-                     <Button
-                        loading={loadingBtn}
-                        onClick={handleCheckout}
-                        className='flex-1 bg-greenY text-white py-5 flex justify-center items-center  hover:!border-greenY hover:!text-white font-vollkorn rounded-none '
-                     >
-                        Checkout
-                     </Button>
-                  </div>
+                  )}
                </div>
             ) : (
                <div className='relative'>

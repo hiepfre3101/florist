@@ -5,10 +5,11 @@ import { ProductInCart } from '../interface/cart'
 import { selectorUser } from '../slices/authSlice'
 import { useNavigate } from 'react-router-dom'
 import useDebounce from './useDebounce'
+import { message } from 'antd'
 
 const useCartManipulation = () => {
    const [quantity, setQuantity] = useState<number>(1)
-   const finalQuantity = useDebounce<number>(quantity, 2000)
+   const finalQuantity = useDebounce<number>(quantity, 1000)
    const [isSend, setIsSend] = useState(false)
    const [addCart] = useAddToCartMutation()
    const [changeQuantity] = useChangeQuantityMutation()
@@ -21,10 +22,17 @@ const useCartManipulation = () => {
       }
       addCart({ userId: user._id, ...product })
    }
-   const handleChangeQuantity = async (data: { value: string | number }, idProduct: string) => {
-      if (data.value !== null || data.value !== '' || finalQuantity !== quantity) {
-         setIsSend(true)
-         await changeQuantity({ userId: user._id, productId: idProduct, ...data })
+   const handleChangeQuantity = async (data: { quantity: string | number }, idProduct: string) => {
+      if (data.quantity !== null || (data.quantity !== '' && finalQuantity !== quantity)) {
+         try {
+            setIsSend(true)
+            await changeQuantity({ userId: user._id, productId: idProduct, ...data })
+            setIsSend(false)
+         } catch (error) {
+            setIsSend(false)
+            setQuantity((prev) => prev)
+            console.log(error)
+         }
       }
    }
    const removeProduct = (idProduct: string) => {

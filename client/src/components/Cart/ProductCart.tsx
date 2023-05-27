@@ -32,7 +32,7 @@ const ProductCart = ({ product, type }: Props) => {
                   defaultValue={product?.quantity}
                   keyboard={true}
                   required
-                  onChange={(value) => handleChangeQuantity({ value: value as number }, product.productId)}
+                  onChange={(value) => handleChangeQuantity({ quantity: value as number }, product.productId)}
                   disabled={isSend}
                />
             )}

@@ -20,7 +20,7 @@ const HomePage = () => {
          const {
             data: { token }
          } = await getToken()
-         if (token) {
+         if (token && userExist) {
             dispatch(authSlice.actions.login(true))
             dispatch(authSlice.actions.setUser(JSON.parse(userExist!)))
          } else {

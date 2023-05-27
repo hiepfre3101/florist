@@ -111,6 +111,46 @@ export const getOne = async (req, res) => {
       })
    }
 }
+export const changeQuantity = async (req, res) => {
+   try {
+      const idUser = req.params.id
+      const { idProduct = '' } = req.query
+      const { quantity } = req.body
+      const userExist = await User.findOne({ _id: idUser })
+      if (!userExist) {
+         return res.json({
+            message: 'Sign in please!'
+         })
+      }
+      const cart = await Cart.findOne({ userId: idUser })
+      const productExt = cart.products.find((product) => product.productId === idProduct)
+      if (productExt) {
+         productExt.quantity = quantity
+         const productsUpdated = [...cart.products.filter((product) => product.productId !== idProduct), productExt]
+         const totalUpdated = productsUpdated.reduce((total, product) => {
+            return (total += product.quantity * product.price)
+         }, 0)
+         const cartUpdated = await Cart.findOneAndUpdate(
+            { userId: idUser },
+            { $set: { products: productsUpdated, totalAmount: totalUpdated } },
+            { new: true }
+         )
+
+         return res.json({
+            message: 'Thay doi san pham thành công',
+            data: cartUpdated
+         })
+      }
+      return res.json({
+         message: 'San pham khong ton tai!',
+         data: {}
+      })
+   } catch (error) {
+      return res.status(400).json({
+         message: error.message
+      })
+   }
+}
 export const removeProduct = async (req, res) => {
    try {
       const idUser = req.params.id

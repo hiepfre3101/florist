@@ -31,7 +31,7 @@ export const cartApi = hoaApi.injectEndpoints({
          }),
          invalidatesTags: (result) => [{ type: 'Cart', id: 'LIST' }]
       }),
-      changeQuantity: build.mutation<ICart, { userId: string; productId: string }>({
+      changeQuantity: build.mutation<ICart, { userId: string; productId: string; quantity: number | string }>({
          query: ({ userId, productId, ...body }) => ({
             url: `cart/${userId}?idProduct=${productId}`,
             method: 'put',
