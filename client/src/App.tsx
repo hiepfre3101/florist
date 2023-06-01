@@ -9,7 +9,6 @@ import { adminRoutes, clientRoutes } from './routes'
 import DefaultLayout from './layouts/DefaultLayout'
 import AdminLayout from './layouts/AdminLayout'
 import HomePage from './client/HomePage/HomePage'
-import AuthenForm from './auth/AuthenForm'
 import { clearToken } from './api/auth/auth'
 
 type ContextOutlet = {
