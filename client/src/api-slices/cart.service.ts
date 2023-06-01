@@ -3,11 +3,11 @@ import { hoaApi } from './base.service'
 
 export const cartApi = hoaApi.injectEndpoints({
    endpoints: (build) => ({
-      getCart: build.query<CartResponse, string>({
+      getCart: build.query<CartResponse, string|undefined>({
          query: (userId) => `cart/${userId}`,
          providesTags: (result, error) => {
-            if (result) {
-               const finalTags = result?.data.products.map((product) => ({
+            if (result?.data?.products) {
+               const finalTags = result?.data?.products?.map((product) => ({
                   type: 'Cart' as const,
                   id: product.productId
                }))
@@ -41,5 +41,6 @@ export const cartApi = hoaApi.injectEndpoints({
       })
    })
 })
+
 
 export const { useGetCartQuery, useAddToCartMutation, useRemoveProductMutation, useChangeQuantityMutation } = cartApi

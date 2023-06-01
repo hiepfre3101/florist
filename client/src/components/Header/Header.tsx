@@ -21,7 +21,7 @@ const Header = ({ logout }: Props) => {
    const isLogin = useAppSelector(selectAuthStatus)
    const user = useAppSelector(selectorUser)
    const items = itemsNavClient({ logout })
-   const { data: cart } = useGetCartQuery(user._id, { skip: !user._id })
+   const { data: cart, refetch } = useGetCartQuery(user._id)
    const { token } = theme.useToken()
    const accessToken = useAppSelector(selectorToken)
    const dropdownMenuStyle = {
@@ -51,6 +51,7 @@ const Header = ({ logout }: Props) => {
          dispatch(authSlice.actions.login(false))
          dispatch(authSlice.actions.setUser({}))
       }
+      refetch()
    }, [accessToken])
    const itemInCart = useMemo(() => itemsCart(cart?.data?.products!), [cart])
    return (
@@ -93,7 +94,7 @@ const Header = ({ logout }: Props) => {
                      </div>
                   )}
                >
-                  <Badge count={cart?.data?.products.length} offset={[1, 7]} size='small' color='#ff9c60'>
+                  <Badge count={cart?.data?.products?.length} offset={[1, 7]} size='small' color='#ff9c60'>
                      <ShoppingCartOutlined className='cursor-pointer text-2xl text-greenY' />
                   </Badge>
                </Dropdown>

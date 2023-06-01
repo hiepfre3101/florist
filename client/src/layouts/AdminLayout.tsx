@@ -76,7 +76,7 @@ const AdminLayout = ({ logout }: Props) => {
          console.log(dataFromSer.data)
       })
       return () => {
-         socket.disconnect()
+         adminSocket.disconnect()
       }
    }, [])
    return (

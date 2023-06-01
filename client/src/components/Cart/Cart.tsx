@@ -15,11 +15,13 @@ type Props = {}
 const Cart = (props: Props) => {
    const [loadingBtn, setLoadingBtn] = useState(false)
    const { _id } = useAppSelector(selectorUser)
-   const { data: cart, isFetching } = useGetCartQuery(_id, { skip: !_id })
+   const { data: cart, isFetching, refetch } = useGetCartQuery(_id, { skip: !_id })
    const navigate = useNavigate()
    const { Panel } = Collapse
 
-   const resetCart = () => {}
+   const resetCart = () => {
+      refetch()
+   }
    const handleCheckout = async () => {
       setLoadingBtn(true)
       const productListSumbit = cart?.data?.products.map((product) => ({
