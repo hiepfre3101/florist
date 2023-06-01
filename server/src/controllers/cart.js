@@ -6,25 +6,19 @@ import { productInCartSchema } from '../schemas/product.js'
 
 dotenv.config()
 
-export const getAll = async (req, res) => {
+export const resetCart = async (idUser) => {
    try {
-      const categories = await Category.find().populate({ path: 'type' })
-      if (categories.length === 0) {
-         return res.status(201).json({
-            message: 'Không có danh muc nào',
-            data: []
-         })
-      }
-      return res.json({
-         message: 'Lấy danh sách sản phẩm thành công',
-         data: categories
-      })
+      const cartExist = await Cart.findOne({ userId: idUser })
+      const productsUpdated = []
+      cartExist.products = productsUpdated
+      const cartUpdated = await Cart.findOneAndUpdate({ _id: cartExist._id }, cartExist, { new: true })
+      return cartUpdated
    } catch (error) {
-      return res.status(400).json({
-         message: error.message
-      })
+      console.log(error.message)
+      return {}
    }
 }
+
 const addProduct = async (cartExist, productAdd, res) => {
    try {
       const productExist = cartExist.products.find((product) => product.productId === productAdd.productId)
