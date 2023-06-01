@@ -3,11 +3,10 @@ import { BrowserRouter, useOutletContext, useNavigate } from 'react-router-dom'
 import { Route, Routes } from 'react-router'
 
 import { message } from 'antd'
-import { authSlice } from './auth/authSlice'
+import { authSlice } from './slices/authSlice'
 import { useAppDispatch } from './hooks/redux/hooks'
 import { adminRoutes, clientRoutes } from './routes'
 import DefaultLayout from './layouts/DefaultLayout'
-import { FormContextProvider } from './context/statusForm'
 import AdminLayout from './layouts/AdminLayout'
 import HomePage from './client/HomePage/HomePage'
 import AuthenForm from './auth/AuthenForm'
@@ -50,14 +49,7 @@ function App() {
          {contextHolder}
          <BrowserRouter>
             <Routes>
-               <Route
-                  path='/'
-                  element={
-                     <FormContextProvider>
-                        <DefaultLayout logout={handleLogout} />
-                     </FormContextProvider>
-                  }
-               >
+               <Route path='/' element={<DefaultLayout logout={handleLogout} />}>
                   <Route index element={<HomePage />} path='/'></Route>
                   {clientRoutes.map((route, index) => {
                      const Page = route.element

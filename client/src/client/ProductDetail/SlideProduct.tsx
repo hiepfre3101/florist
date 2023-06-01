@@ -3,45 +3,14 @@ import Carousel, { CarouselRef } from 'antd/es/carousel'
 import { RightOutlined, LeftOutlined } from '@ant-design/icons'
 
 import { IProduct } from '../../interface/product'
+import useCarousel from '../../hooks/useCarousel'
 
 type Props = {
    product: IProduct
 }
 
 const SlideProduct = ({ product }: Props) => {
-   const [currentSlide, setCurrentSlide] = useState<number>(0)
-   const carouselRef = useRef<CarouselRef>(null)
-   const NextArrow = () => (
-      <button>
-         <RightOutlined
-            className='absolute hover:p-4 duration-300 right-1 top-1/2 p-3 bg-transparent drop-shadow-lg shadow-md rounded-full text-white font-normal text-md flex justify-center items-center'
-            onClick={() => {
-               carouselRef?.current?.next()
-
-               if (currentSlide === product.images.length - 1) {
-                  return setCurrentSlide(0)
-               }
-               return setCurrentSlide(currentSlide + 1)
-            }}
-         />
-      </button>
-   )
-   const PrevArrow = () => {
-      return (
-         <button
-            className='absolute drop-shadow-lg shadow-md hover:p-4 duration-300 left-1 top-1/2 z-10 p-3 bg-transparent  rounded-full text-white font-normal text-md flex justify-center items-center'
-            onClick={() => {
-               carouselRef?.current?.prev()
-               if (currentSlide === 0) {
-                  return setCurrentSlide(product.images.length - 1)
-               }
-               return setCurrentSlide(currentSlide - 1)
-            }}
-         >
-            <LeftOutlined />
-         </button>
-      )
-   }
+   const { carouselRef, NextArrow, PrevArrow, setCurrentSlide, currentSlide } = useCarousel({ list: product.images })
    return (
       <div className='col-start-1 col-end-4 relative flex justify-start gap-10'>
          <div className='flex w-[15%] gap-2  justify-start flex-col'>

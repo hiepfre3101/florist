@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  font-family: 'Vollkorn', serif;
+  font-family: 'Vollkorn', serif !important;
   line-height: 1.5;
   font-weight: 400;
 }
@@ -54,4 +54,13 @@ a {
 .ant-form-item-control{
   margin: 0;
   flex: 1;
+}
+.slick-track{
+  display: flex !important;
+  justify-content: start !important;
+  gap:2rem !important;
+  position: relative !important;
+}
+.ant-collapse-header{
+  padding-right: 0 !important;
 }

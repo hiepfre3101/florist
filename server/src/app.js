@@ -13,20 +13,31 @@ import categoryRouter from "./routes/category.js";
 import uploadRouter from "./routes/upload.js";
 import userRouter from "./routes/user.js";
 import typesRouter from "./routes/type.js";
+import cartRouter from "./routes/cart.js";
 
 dotenv.config();
 mongoose.connect(process.env.DB_URL);
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer,{
-  cors:"*"
+const io = new Server(httpServer, {
+  cors: "*",
 });
 io.on("connection", (socket) => {
   socket.on("newOrder", (dataFromCLi) => {
-    io.emit("newOrder", {
+    io.of("/").emit("newOrder", {
       data: `User ${
         dataFromCLi.data ? dataFromCLi.data : "nothing"
       } ordered successfully!`,
+    });
+  });
+});
+io.of("/admin").on("connection", (socket) => {
+  socket.on("newOrder", (dataFromCLi) => {
+    console.log(dataFromCLi);
+    io.of("/admin").emit("newOrder", {
+      data: `Order from user ${
+        dataFromCLi.data ? dataFromCLi.data : "nothing"
+      } has created!`,
     });
   });
 });
@@ -43,6 +54,5 @@ app.use("/api", uploadRouter);
 app.use("/api", userRouter);
 app.use("/api", typesRouter);
 app.use("/api", orderRouter);
-httpServer.listen(process.env.PORT, () => {
-  console.log("Server running");
-});
+app.use("/api", cartRouter);
+httpServer.listen(process.env.PORT);

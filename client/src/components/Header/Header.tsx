@@ -1,15 +1,16 @@
 import { Link } from 'react-router-dom'
-import { ShoppingCartOutlined, SearchOutlined } from '@ant-design/icons'
+import { ShoppingCartOutlined, SearchOutlined, BellOutlined } from '@ant-design/icons'
 import { Badge, MenuProps, theme } from 'antd'
 import { Dropdown, Space } from 'antd'
 
 import { socket } from '../../socket/config'
 import { useAppDispatch, useAppSelector } from '../../hooks/redux/hooks'
-import { selectAuthStatus, selectorUser } from '../../auth/authSlice'
+import { authSlice, selectAuthStatus, selectorUser } from '../../slices/authSlice'
 import { itemsNavClient } from '../../configAntd/navItems'
-import React, { useEffect } from 'react'
-import { productSelector, cartSlice, totalSelector, haveNewSelector } from '../Cart/cartSlice'
+import React, { useEffect, useMemo } from 'react'
 import { itemsCart } from '../../configAntd/itemsCart'
+import { useGetCartQuery } from '../../api-slices/cart.service'
+import { selectorToken } from '../../slices/authSlice'
 
 type Props = {
    logout: () => void
@@ -20,10 +21,9 @@ const Header = ({ logout }: Props) => {
    const isLogin = useAppSelector(selectAuthStatus)
    const user = useAppSelector(selectorUser)
    const items = itemsNavClient({ logout })
-   const products = useAppSelector(productSelector)
-   const total = useAppSelector(totalSelector)
-   const haveNew = useAppSelector(haveNewSelector)
+   const { data: cart } = useGetCartQuery(user._id, { skip: !user._id })
    const { token } = theme.useToken()
+   const accessToken = useAppSelector(selectorToken)
    const dropdownMenuStyle = {
       backgroundColor: token.colorBgElevated,
       borderRadius: token.borderRadiusLG,
@@ -35,21 +35,24 @@ const Header = ({ logout }: Props) => {
       socket.on('connect', () => {
          console.log('connected')
       })
-      socket.emit('newOrder', { data: user.name })
       socket.on('newOrder', (dataFromSer) => {
          console.log(dataFromSer.data)
       })
       return () => {
          socket.disconnect()
       }
-   }, [haveNew])
-   useEffect(() => {
-      const cartExist = localStorage.getItem('cart')
-      if (cartExist) {
-         dispatch(cartSlice.actions.setCart(JSON.parse(cartExist)))
-      }
    }, [])
-   const itemInCart = itemsCart(products)
+   useEffect(() => {
+      const userExist = localStorage.getItem('user')
+      if (userExist) {
+         dispatch(authSlice.actions.login(true))
+         dispatch(authSlice.actions.setUser(JSON.parse(userExist)))
+      } else {
+         dispatch(authSlice.actions.login(false))
+         dispatch(authSlice.actions.setUser({}))
+      }
+   }, [accessToken])
+   const itemInCart = useMemo(() => itemsCart(cart?.data?.products!), [cart])
    return (
       <header className='overflow-hidden w-full flex justify-between items-center py-1 px-14  z-30 text-primary bg-yellowW'>
          <Link to='/' className='w-[20%] flex items-center justify-center pb-2'>
@@ -68,6 +71,7 @@ const Header = ({ logout }: Props) => {
          </nav>
          <div className='flex gap-4 justify-end w-[20%] items-center text-greenY'>
             <SearchOutlined className='cursor-pointer text-xl' />
+            <BellOutlined className='cursor-pointer text-xl' />
             <Link to='/cart'>
                <Dropdown
                   menu={{ items: itemInCart }}
@@ -81,7 +85,7 @@ const Header = ({ logout }: Props) => {
                         })}
                         <div className='flex justify-start items-center gap-10 font-vollkorn relative p-4'>
                            <p className='text-orangeH'>Total:</p>
-                           <p className='text-orangeH font-semibold text-lg'>${total}</p>
+                           <p className='text-orangeH font-semibold text-lg'>${cart?.data?.totalAmount}</p>
                            <Link to={'/cart'} className='absolute right-4 mb-2'>
                               <button className='bg-greenY p-2 text-white'>Check out</button>
                            </Link>
@@ -89,8 +93,7 @@ const Header = ({ logout }: Props) => {
                      </div>
                   )}
                >
-                  <Badge count={products.length} offset={[1, 1]} size='small'>
-                     {' '}
+                  <Badge count={cart?.data?.products.length} offset={[1, 7]} size='small' color='#ff9c60'>
                      <ShoppingCartOutlined className='cursor-pointer text-2xl text-greenY' />
                   </Badge>
                </Dropdown>

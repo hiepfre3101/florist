@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux/hooks'
-import { imageSlice, allPropertiesSelector } from '../../components/Modal/ModalUpload/imageSlice'
+import { imageSlice, allPropertiesSelector } from '../../slices/imageSlice'
 import useMyToken from '../../hooks/useMyToken'
 import { ICategory } from '../../interface/category'
 import { getAllCategory } from '../../api/category/category'

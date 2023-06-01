@@ -1,3 +1,4 @@
+import { ProductInCart } from './cart';
 import { UploadFile } from 'antd'
 import { IImage } from './image'
 import { ICategory } from './category'

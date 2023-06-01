@@ -14,10 +14,11 @@ import { Link, Outlet, useNavigate } from 'react-router-dom'
 
 import useMyToken from '../hooks/useMyToken'
 import { useAppDispatch, useAppSelector } from '../hooks/redux/hooks'
-import { authSlice, selectorUser } from '../auth/authSlice'
+import { authSlice, selectorUser } from '../slices/authSlice'
 import { itemsNavClient } from '../configAntd/navItems'
 import { getToken } from '../api/auth/auth'
-import { selectAuthStatus } from '../auth/authSlice'
+import { selectAuthStatus } from '../slices/authSlice'
+import { adminSocket, socket } from '../socket/config'
 
 const { Content, Header, Sider } = Layout
 type MenuItem = Required<MenuProps>['items'][number]
@@ -65,6 +66,18 @@ const AdminLayout = ({ logout }: Props) => {
             dispatch(authSlice.actions.token(token))
          }
       })()
+   }, [])
+   useEffect(() => {
+      adminSocket.open()
+      adminSocket.on('connect', () => {
+         console.log('admin connected')
+      })
+      adminSocket.on('newOrder', (dataFromSer) => {
+         console.log(dataFromSer.data)
+      })
+      return () => {
+         socket.disconnect()
+      }
    }, [])
    return (
       <Layout style={{ minHeight: '100vh' }}>

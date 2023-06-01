@@ -5,7 +5,7 @@ import { signin } from '../api/auth/auth'
 import { useNavigate } from 'react-router-dom'
 import ErrorSpan from '../components/ErrorSpan'
 import { useAppDispatch } from '../hooks/redux/hooks'
-import { authSlice } from './authSlice'
+import { authSlice } from '../slices/authSlice'
 import FooterForm from './components/FooterForm'
 type Props = {
    status: 'sign in' | 'sign up'
@@ -47,7 +47,7 @@ const Login = ({ status, onChangeStatus }: Props) => {
          console.log(error)
       }
    }
-   if (isLoading) return <Loading sreenSize='lg'/>
+   if (isLoading) return <Loading sreenSize='lg' />
    return (
       <div className='flex flex-col items-start w-[30%] h-auto aspect-square'>
          <p className='text-primary text-3xl'>Sign in</p>

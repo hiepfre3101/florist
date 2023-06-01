@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { RootState } from '../../../store/store'
-import { IImage } from '../../../interface/image'
+import { RootState } from '../store/store'
+import { IImage } from '../interface/image'
 
 interface IImageState {
    images: IImage[]
