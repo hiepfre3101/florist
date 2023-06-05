@@ -1,4 +1,15 @@
-import { Button, ConfigProvider, Form, Input, Select, InputNumber, message, Radio, RadioChangeEvent } from 'antd'
+import {
+   Button,
+   ConfigProvider,
+   Form,
+   Input,
+   Select,
+   InputNumber,
+   message,
+   Radio,
+   RadioChangeEvent,
+   ColorPicker
+} from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -140,7 +151,7 @@ const AddProduct = () => {
                         className='border-gray-400 hover:bg-gray-200 duration-300 border p-5 w-[20%] rounded-lg cursor-pointer'
                         onClick={() => setIsOpen(true)}
                      >
-                        {<PlusOutlined />}
+                        {<PlusOutlined rev={true} />}
                         <div>Select images</div>
                      </div>
                   )}
@@ -156,6 +167,20 @@ const AddProduct = () => {
                rules={[{ required: true, message: 'Please input product description!' }]}
             >
                <Input.TextArea />
+            </Form.Item>
+            <Form.Item
+               validateTrigger={'onBlur'}
+               label={'Color'}
+               hasFeedback
+               className='w-full'
+               name='color'
+               rules={[{ required: true, message: 'Please choose product color!' }]}
+            >
+               <ColorPicker
+                  onChange={(_, hex) => {
+                     form.setFieldValue('color', hex)
+                  }}
+               />
             </Form.Item>
             <Form.Item
                validateTrigger={'onBlur'}

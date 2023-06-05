@@ -1,4 +1,4 @@
-import { ProductInCart } from './cart';
+import { ProductInCart } from './cart'
 import { UploadFile } from 'antd'
 import { IImage } from './image'
 import { ICategory } from './category'
@@ -20,6 +20,7 @@ export interface IInputProduct {
    images: string[]
    type: string
    categories: string[]
+   color: string
 }
 
 export interface IDataResponse {

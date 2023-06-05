@@ -1,6 +1,5 @@
-import Icon, { HomeOutlined } from '@ant-design/icons'
+import Icon from '@ant-design/icons'
 import type { CustomIconComponentProps } from '@ant-design/icons/lib/components/Icon'
-type Props = {}
 
 const FlowerSvg = () => (
    <svg xmlns='http://www.w3.org/2000/svg' id='Layer_1' data-name='Layer 1' viewBox='0 0 64 64'>
@@ -59,7 +58,7 @@ const FlowerSvg = () => (
    </svg>
 )
 const FlowerIcon = (props: Partial<CustomIconComponentProps>) => {
-   return <Icon component={FlowerSvg} {...props} style={{fontSize:"3rem"}}/>
+   return <Icon component={FlowerSvg} {...props} style={{ fontSize: '3rem' }} rev='' />
 }
 
 export default FlowerIcon

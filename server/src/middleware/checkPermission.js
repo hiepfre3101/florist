@@ -7,7 +7,7 @@ export const checkPermission = async (req, res, next) => {
    try {
       const authHeader = req.headers.authorization
       //check login
-      if (!authHeader) {
+      if (!authHeader || !req.cookies.jwt) {
          return res.status(401).json({
             message: 'Login expired ! Please Login again',
             isExpried: true

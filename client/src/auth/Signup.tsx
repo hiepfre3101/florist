@@ -56,7 +56,7 @@ const Signup = ({ status, onChangeStatus }: Props) => {
             onFinishFailed={onFinishFailed}
             autoComplete='off'
             validateTrigger={['onChange', 'onBlur']}
-            className='bg-yellowW flex justify-center flex-col items-start w-full h-full mt-10 px-6 overflow-auto pt-48'
+            className='bg-yellowW flex justify-center flex-col items-start w-full h-full  px-6 overflow-auto pt-16'
          >
             <p className='text-xl text-primary uppercase font-vollkorn mb-5'>information</p>
             <Form.Item

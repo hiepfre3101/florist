@@ -12,8 +12,8 @@ type Props = {
 const SlideProduct = ({ product }: Props) => {
    const { carouselRef, NextArrow, PrevArrow, setCurrentSlide, currentSlide } = useCarousel({ list: product.images })
    return (
-      <div className='col-start-1 col-end-4 relative flex justify-start gap-10'>
-         <div className='flex w-[15%] gap-2  justify-start flex-col'>
+      <div className='col-start-1 col-end-4 relative flex justify- gap-12'>
+         <div className='flex w-[15%]  justify-start flex-col gap-2'>
             {product?.images?.map((img, index) => (
                <div
                   key={index}
@@ -30,7 +30,7 @@ const SlideProduct = ({ product }: Props) => {
                </div>
             ))}
          </div>
-         <div className='relative w-2/3 '>
+         <div className='w-[70%]'>
             <Carousel
                ref={carouselRef}
                dots={false}
