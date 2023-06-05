@@ -29,19 +29,19 @@ const useCarousel = ({ list }: Props) => {
       return (
          <button
             onClick={handleNext}
-            className={`z-40 absolute hover:p-5 duration-300 right-5 top-[40%] p-4 bg-transparent drop-shadow-lg shadow-md rounded-full !text-white font-normal text-md flex justify-center items-center`}
+            className={`z-40 absolute hover:p-5 duration-300 -right-9 top-[40%] p-4 bg-transparent drop-shadow-lg shadow-md rounded-full !text-greenY font-normal text-md flex justify-center items-center`}
          >
-            <RightOutlined />
+            <RightOutlined rev=""/>
          </button>
       )
    }
    const PrevArrow = ({ className }: ArrowProps) => (
       <button
          onClick={handlePrev}
-         className={`z-40 absolute hover:p-5 duration-300 left-4 top-[40%] p-4 bg-transparent drop-shadow-lg shadow-md rounded-full !text-white font-normal text-md flex justify-center items-center`}
+         className={`z-40 absolute hover:p-5 duration-300 -left-6 top-[40%] p-4 bg-transparent drop-shadow-lg shadow-md rounded-full !text-greenY font-normal text-md flex justify-center items-center`}
       >
          {' '}
-         <LeftOutlined />
+         <LeftOutlined rev=""/>
       </button>
    )
    return { carouselRef, NextArrow, PrevArrow ,setCurrentSlide,currentSlide}

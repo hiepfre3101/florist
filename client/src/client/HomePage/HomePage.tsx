@@ -9,6 +9,7 @@ import { getToken } from '../../api/auth/auth'
 import OutstandProducts from './OutstandProducts'
 import Hero from './Hero'
 import CarouselProduct from '../../components/CarouselProduct/CarouselProduct'
+import { TruckIcon } from '../../components/Icons/TruckIcon'
 const HomePage = () => {
    const { logout } = useLogout()
    const [isLoading, setIsLoading] = useState<boolean>(false)

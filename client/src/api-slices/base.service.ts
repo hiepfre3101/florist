@@ -3,6 +3,7 @@ import { RootState } from '../store/store'
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
 import { notification } from 'antd'
 import { authSlice } from '../slices/authSlice'
+import { clearToken } from '../api/auth/auth'
 const customBaseQuery =
    ({
       baseUrl
@@ -26,7 +27,7 @@ const customBaseQuery =
          const headers = {
             Authorization: `Bearer ${token}`
          }
-         const result = await axios({ url: baseUrl + url, method, data, params, headers })
+         const result = await axios({ url: baseUrl + url, method, data, params, headers, withCredentials: true })
          return { data: result.data }
       } catch (error) {
          let err = error as AxiosError<{ data?: any[]; message?: string; isExpired?: boolean }>
@@ -34,6 +35,7 @@ const customBaseQuery =
             notification.open({
                message: err.response?.data?.message
             })
+            await clearToken()
             dispatch(authSlice.actions.login(false))
             dispatch(authSlice.actions.token(''))
          }

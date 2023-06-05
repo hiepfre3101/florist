@@ -71,8 +71,8 @@ const Header = ({ logout }: Props) => {
             </Link>
          </nav>
          <div className='flex gap-4 justify-end w-[20%] items-center text-greenY'>
-            <SearchOutlined className='cursor-pointer text-xl' />
-            <BellOutlined className='cursor-pointer text-xl' />
+            <SearchOutlined className='cursor-pointer text-xl' rev={''} />
+            <BellOutlined className='cursor-pointer text-xl' rev='' />
             <Link to='/cart'>
                <Dropdown
                   menu={{ items: itemInCart }}
@@ -80,7 +80,7 @@ const Header = ({ logout }: Props) => {
                   placement='bottomLeft'
                   arrow={true}
                   dropdownRender={(menu) => (
-                     <div className='max-w-[500px] min-w-[400px]' style={dropdownMenuStyle}>
+                     <div className='max-w-[500px] min-w-[400px] z-50' style={dropdownMenuStyle}>
                         {React.cloneElement(menu as React.ReactElement, {
                            style: { boxShadow: 'none', fontFamily: 'Vollkorn, serif' }
                         })}
@@ -95,7 +95,7 @@ const Header = ({ logout }: Props) => {
                   )}
                >
                   <Badge count={cart?.data?.products?.length} offset={[1, 7]} size='small' color='#ff9c60'>
-                     <ShoppingCartOutlined className='cursor-pointer text-2xl text-greenY' />
+                     <ShoppingCartOutlined className='cursor-pointer text-2xl text-greenY' rev='' />
                   </Badge>
                </Dropdown>
             </Link>
