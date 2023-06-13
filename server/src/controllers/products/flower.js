@@ -1,8 +1,7 @@
 import dotenv from 'dotenv'
-import Product from '../models/product.js'
-import Category from '../models/category.js'
-import Type from '../models/type.js'
-import { productSchema } from '../schemas/product.js'
+import Flower from '../../models/products/flower.js'
+import Category from '../../models/category.js'
+import { flowerSchema } from '../../schemas/products/flower.js'
 dotenv.config()
 
 export const getAll = async (req, res) => {
@@ -12,15 +11,14 @@ export const getAll = async (req, res) => {
       limit: _limit,
       populate: [
          { path: 'categories', select: ['name'] },
-         { path: 'images', select: ['url'] },
-         { path: 'type', select: ['name', '_id'] }
+         { path: 'images', select: ['url'] }
       ],
       page: _page
    }
    try {
-      const products = await Product.paginate(
+      const products = await Flower.paginate(
          {
-            name: new RegExp(_q, 'i'),
+            name: new RegExp(_q, 'i')
          },
          options
       )
@@ -42,7 +40,7 @@ export const getAll = async (req, res) => {
 }
 export const getOne = async (req, res) => {
    try {
-      const product = await Product.findOne({ _id: req.params.id }).populate([
+      const product = await Flower.findOne({ _id: req.params.id }).populate([
          {
             path: 'categories',
             select: 'name'
@@ -67,12 +65,12 @@ export const getOne = async (req, res) => {
 }
 export const create = async (req, res) => {
    try {
-      const { error } = productSchema.validate(req.body)
+      const { error } = flowerSchema.validate(req.body)
       if (error)
          return res.status(400).json({
             message: error.details[0].message
          })
-      const product = await Product.create(req.body)
+      const product = await Flower.create(req.body)
       if (!product) {
          return res.status(404).json({
             message: 'Thêm sản phẩm không thành công'
@@ -89,28 +87,24 @@ export const create = async (req, res) => {
             })
          }
       })
-      const typeUpdated = await Type.findByIdAndUpdate(req.body.type, {
-         $addToSet: { products: product._id }
-      })
       return res.json({
          message: 'Thêm sản phẩm thành công',
-         data: product,
-         type: typeUpdated
+         data: product
       })
    } catch (error) {
       return res.status(400).json({
-         message: error
+         message: error.message
       })
    }
 }
 export const update = async (req, res) => {
    try {
-      const { error } = productSchema.validate(req.body)
+      const { error } = flowerSchema.validate(req.body)
       if (error)
          return res.status(400).json({
             message: error.details[0].message
          })
-      const product = await Product.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
+      const product = await Flower.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
       if (!product) {
          return res.json({
             message: 'Cập nhật sản phẩm không thành công'
@@ -127,9 +121,6 @@ export const update = async (req, res) => {
             })
          }
       })
-      await Type.findByIdAndUpdate(req.body.type, {
-         $addToSet: { products: product._id }
-      })
       res.json({
          message: 'Cập nhật sản phẩm thành công',
          product
@@ -143,12 +134,7 @@ export const update = async (req, res) => {
 
 export const remove = async (req, res) => {
    try {
-      const product = await Product.deleteOne({ _id: req.params.id }, { new: true })
-      // if (!product) {
-      //     return res.json({
-      //         message: "Xóa sản phẩm không thành công",
-      //     });
-      // }
+      const product = await Flower.deleteOne({ _id: req.params.id }, { new: true })
       res.json({
          message: 'Xóa sản phẩm thành công',
          product,

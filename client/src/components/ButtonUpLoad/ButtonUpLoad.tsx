@@ -36,9 +36,9 @@ const ButtonUpLoad = ({ form, className }: Props) => {
    const [previewImage, setPreviewImage] = useState('')
    const [files, setFiles] = useState<UploadFile[] | IImage[]>([])
    const uploadButton = (
-      <div className='bg-primary rounded-lg min-w-[200px] p-2 font-semibold flex flex-col items-center justify-center text-white'>
-         {loading ? <LoadingOutlined /> : <PlusOutlined />}
-         <div>Upload from your device</div>
+      <div className='bg-primary rounded-lg min-w-[100px] p-2 font-semibold flex flex-col items-center justify-center text-white '>
+         {loading ? <LoadingOutlined rev='' /> : <PlusOutlined rev='' />}
+         <div className='text-sm'>Upload from your device</div>
       </div>
    )
    const handlePreview = async (file: UploadFile) => {
@@ -64,7 +64,7 @@ const ButtonUpLoad = ({ form, className }: Props) => {
          multiple
          maxCount={3}
       >
-         <div className='flex justify-start gap-3 flex-wrap'>
+         <div className='flex justify-start gap-3 flex-wrap w-full'>
             {files!.length >= 3 ? null : uploadButton}
             <Modal footer={null} onCancel={handleCancel} open={previewOpen}>
                <img alt='example' style={{ width: '100%' }} src={previewImage} />

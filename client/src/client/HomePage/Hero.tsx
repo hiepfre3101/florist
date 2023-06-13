@@ -14,21 +14,21 @@ type IHeroData = {
 const fakeData: IHeroData[] = [
    {
       image: 'https://res.cloudinary.com/diqyzhuc2/image/upload/v1685955473/hoaUi/pexels-secret-garden-931164_a691pm.jpg',
-      link: '/bouquets',
+      link: 'bouquets',
       title: 'Handmade Bouquets',
       description:
          'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa dolorem officiis eos ratione recusandae aspernatur obcaecati nobis similique corporis, quos veniam corrupti quibusdam tempora facere ea pariatur omnis, est ut.'
    },
    {
       image: 'https://res.cloudinary.com/diqyzhuc2/image/upload/v1683284991/hoaUi/pexels-secret-garden-931147_nivuoq.jpg',
-      link: '/new',
+      link: 'new',
       title: 'New flowers',
       description:
          'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa dolorem officiis eos ratione recusandae aspernatur obcaecati nobis similique corporis, quos veniam corrupti quibusdam tempora facere ea pariatur omnis, est ut.'
    },
    {
       image: 'https://res.cloudinary.com/diqyzhuc2/image/upload/v1685955473/hoaUi/pexels-secret-garden-931164_a691pm.jpg',
-      link: '/offer',
+      link: 'offer',
       title: 'Discount',
       description:
          'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa dolorem officiis eos ratione recusandae aspernatur obcaecati nobis similique corporis, quos veniam corrupti quibusdam tempora facere ea pariatur omnis, est ut.'
@@ -63,7 +63,7 @@ const Hero = (props: Props) => {
             <p className='text-up' key={index + 1}>
                {slide.description}
             </p>
-            <Link to={'/new'}>
+            <Link to={`/${slide.link}`}>
                <button className='w-1/3 bg-greenY text-white rounded-sm p-3 mt-10'>Shop Now</button>
             </Link>
          </div>

@@ -17,7 +17,6 @@ import FileImage from '../../components/Modal/ModalUpload/FileImage'
 import { getOneProduct } from '../../api/product/product'
 import { IUser } from '../../interface/user'
 import useTriggerUpload from '../../hooks/useTriggerUpload'
-import { getAllType } from '../../api/type/type'
 import { ITypeOfProduct } from '../../interface/type'
 
 const onFinishFailed = (errorInfo: any) => {
@@ -30,7 +29,6 @@ const UpdateProduct = () => {
    const [isLoading, setIsLoading] = useState(false)
    const [types, setTypes] = useState<ITypeOfProduct[]>([])
    const [categories, setCategories] = useState<ICategory[]>([])
-   console.log(categories)
    const navigate = useNavigate()
    const [form] = Form.useForm<IInputProduct>()
    const { id } = useParams()
@@ -48,18 +46,6 @@ const UpdateProduct = () => {
    useEffect(() => {
       form.setFieldValue('images', imagesSelected)
    }, [imagesSelected])
-   useEffect(() => {
-      ;(async () => {
-         try {
-            const {
-               data: { data }
-            } = await getAllType()
-            setTypes(data)
-         } catch (error) {
-            console.log(error)
-         }
-      })()
-   }, [])
    useEffect(() => {
       ;(async () => {
          try {
@@ -159,7 +145,7 @@ const UpdateProduct = () => {
                         className='border-gray-400 hover:bg-gray-200 duration-300 border p-5 w-[30%] rounded-lg cursor-pointer'
                         onClick={() => setIsOpen(true)}
                      >
-                        {<PlusOutlined />}
+                        {<PlusOutlined rev='' />}
                         <div>Select images</div>
                      </div>
                   )}

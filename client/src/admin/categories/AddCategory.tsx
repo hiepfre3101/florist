@@ -4,7 +4,6 @@ import useMyToken from '../../hooks/useMyToken'
 import { useNavigate } from 'react-router-dom'
 import { addCategory } from '../../api/category/category'
 import Loading from '../../components/Loading/Loading'
-import { getAllType } from '../../api/type/type'
 import { ITypeOfProduct } from '../../interface/type'
 
 const onFinishFailed = (errorInfo: any) => {
@@ -24,17 +23,6 @@ const AddCategory = () => {
          span: 16
       }
    }
-   useEffect(() => {
-      ;(async () => {
-         try {
-            const { data } = await getAllType()
-            setTypes(data.data)
-         } catch (error) {
-            message.error('Cannot get types of product!')
-            console.log(error)
-         }
-      })()
-   }, [])
    const handleChangeRadio = (e: RadioChangeEvent) => {
       form.setFieldValue('type', e.target.value)
    }
