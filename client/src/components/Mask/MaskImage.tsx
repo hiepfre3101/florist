@@ -47,19 +47,23 @@ const MaskImage = ({ publicId, idImageMongo, type }: Props) => {
    return (
       <div className='z-[999] bg-[rgba(0,0,0,0.5)] w-full h-[100px] flex justify-center items-center absolute top-0'>
          {type === 'sync' && (
-            <RestOutlined className='text-white text-lg z-50' onClick={() => handleRemoveImgInForm(idImageMongo)} />
+            <RestOutlined
+               rev=''
+               className='text-white text-lg z-50'
+               onClick={() => handleRemoveImgInForm(idImageMongo)}
+            />
          )}
          {type === 'async' && (
             <Popconfirm
                okButtonProps={{ loading: confirmLoading, className: 'bg-orangeH' }}
                open={open}
                title='Do you want delete this image?'
-               description='If you delete this image, any products which use this image will be lost its image'
+               description='If you delete this image, all products which use this image will be lost its image'
                onConfirm={() => handleConfirm(publicId)}
                onCancel={handleCancel}
             >
                {' '}
-               <RestOutlined className='text-white text-lg z-50' onClick={() => setOpen(true)} />
+               <RestOutlined rev='' className='text-white text-lg z-50' onClick={() => setOpen(true)} />
             </Popconfirm>
          )}
       </div>

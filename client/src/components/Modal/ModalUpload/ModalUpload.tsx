@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { CloseOutlined } from '@ant-design/icons'
 import { Form, UploadFile, message, Modal, Button } from 'antd'
 
@@ -32,7 +32,7 @@ const ModalUpload = ({ isOpen, onClose, onAdd }: Props) => {
    useEffect(() => {
       ;(async () => {
          try {
-            if (isOpen) {
+            if (isOpen && images.length === 0) {
                setIsLoading(true)
                const { data } = await getUser(userId)
                if (data.user?.images) {
@@ -44,7 +44,7 @@ const ModalUpload = ({ isOpen, onClose, onAdd }: Props) => {
             console.log(error)
          }
       })()
-   }, [isOpen])
+   }, [])
    const onFinish = async (values: any) => {
       try {
          setIsLoading(true)
@@ -79,6 +79,7 @@ const ModalUpload = ({ isOpen, onClose, onAdd }: Props) => {
                </Button>
             </div>
          }
+         destroyOnClose
          closable={false}
          maskStyle={{ minHeight: 'screen', paddingBottom: '2rem' }}
          className=' min-w-[80%] top-[5%]  min-h-[50%] rounded-lg '
@@ -89,7 +90,7 @@ const ModalUpload = ({ isOpen, onClose, onAdd }: Props) => {
                onClick={onClose}
                className='duration-300 hover:bg-gray-100 p-3  rounded-full w-[50px] h-[50px] flex items-center justify-center text-gray-500 absolute top-2 right-5'
             >
-               <CloseOutlined className='text-lg' />
+               <CloseOutlined rev='' className='text-lg' />
             </button>
          </div>
          <div className='flex gap-3 w-full'>
@@ -114,10 +115,10 @@ const ModalUpload = ({ isOpen, onClose, onAdd }: Props) => {
                         name='images'
                         rules={[{ required: true, message: '' }]}
                      >
-                        <ButtonUpLoad form={form} className='absolute left-5 top-5 pr-3 ' />
+                        <ButtonUpLoad form={form} className='w-full flex justify-center items-center py-3' />
                      </Form.Item>
-                     <Form.Item className='absolute bottom-10 left-[40%] translate-x-[-50%]'>
-                        <button className='ml-10 py-1 px-5 duration-500 font-semibold border rounded-md border-primary hover:bg-primary hover:text-white'>
+                     <Form.Item className='absolute bottom-10 left-[40%] translate-x-[-50%] flex justify-center items-center'>
+                        <button className='ml-[50%] py-1 px-5 duration-500 font-semibold border rounded-md border-primary hover:bg-primary hover:text-white'>
                            Upload
                         </button>
                      </Form.Item>

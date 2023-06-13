@@ -39,6 +39,7 @@ const FileImage = ({ src, publicId, className, idImageMongo, typeMask }: Props) 
          ref={imageRef}
       >
          <Image
+            loading='lazy'
             width={'100%'}
             height={'100%'}
             src={src}

@@ -11,7 +11,7 @@ const useCartManipulation = () => {
    const [quantity, setQuantity] = useState<number>(1)
    const finalQuantity = useDebounce<number>(quantity, 1000)
    const [isSend, setIsSend] = useState(false)
-   const [addCart] = useAddToCartMutation()
+   const [addCart, { status }] = useAddToCartMutation()
    const [changeQuantity] = useChangeQuantityMutation()
    const [removeItem] = useRemoveProductMutation()
    const navigate = useNavigate()
@@ -21,6 +21,11 @@ const useCartManipulation = () => {
          return navigate('/auth')
       }
       addCart({ userId: user._id, ...product })
+      if (status.startsWith('2')) {
+         message.success('Added to cart')
+      } else {
+         message.error('something wrong')
+      }
    }
    const handleChangeQuantity = async (data: { quantity: string | number }, idProduct: string) => {
       if (data.quantity !== null || (data.quantity !== '' && finalQuantity !== quantity)) {

@@ -26,8 +26,6 @@ import ModalUpload from '../../components/Modal/ModalUpload/ModalUpload'
 import { IImage } from '../../interface/image'
 import FileImage from '../../components/Modal/ModalUpload/FileImage'
 import useTriggerUpload from '../../hooks/useTriggerUpload'
-import { getAllType } from '../../api/type/type'
-import { ITypeOfProduct } from '../../interface/type'
 
 const onFinishFailed = (errorInfo: any) => {
    console.log('Failed:', errorInfo)
@@ -37,7 +35,6 @@ const AddProduct = () => {
    const { colorPrimary } = useMyToken()
    const { isOpen, setIsOpen, handleCloseModal, handleOnAdd } = useTriggerUpload()
    const [isLoading, setIsLoading] = useState(false)
-   const [types, setTypes] = useState<ITypeOfProduct[]>([])
    const [categories, setCategories] = useState<ICategory[]>([])
    const navigate = useNavigate()
    const [form] = Form.useForm<IInputProduct>()
@@ -55,18 +52,6 @@ const AddProduct = () => {
    useEffect(() => {
       form.setFieldValue('images', imagesSelected)
    }, [imagesSelected])
-   useEffect(() => {
-      ;(async () => {
-         try {
-            const {
-               data: { data }
-            } = await getAllType()
-            setTypes(data)
-         } catch (error) {
-            console.log(error)
-         }
-      })()
-   }, [])
    const onFinish = async (values: IInputProduct) => {
       try {
          setIsLoading(true)
@@ -79,12 +64,6 @@ const AddProduct = () => {
          message.error('Add product failed!')
          console.log(error)
       }
-   }
-   const handleChangeRadio = (e: RadioChangeEvent) => {
-      form.setFieldValue('categories', [])
-      form.setFieldValue('type', e.target.value)
-      const typeChecked = types.find((type) => type._id === e.target.value)
-      setCategories(typeChecked?.subCategories!)
    }
    if (isLoading) return <Loading />
    return (
@@ -148,14 +127,14 @@ const AddProduct = () => {
                      ))}
                   {imagesSelected.length < 3 && (
                      <div
-                        className='border-gray-400 hover:bg-gray-200 duration-300 border p-5 w-[20%] rounded-lg cursor-pointer'
+                        className='border-gray-400 hover:bg-gray-200 duration-300 border p-2 h-auto aspect-square w-[20%] rounded-lg cursor-pointer'
                         onClick={() => setIsOpen(true)}
                      >
-                        {<PlusOutlined rev={true} />}
+                        {<PlusOutlined rev='' />}
                         <div>Select images</div>
                      </div>
                   )}
-                  <ModalUpload isOpen={isOpen} onClose={handleCloseModal} onAdd={handleOnAdd} />
+                  {isOpen && <ModalUpload isOpen={isOpen} onClose={handleCloseModal} onAdd={handleOnAdd} />}
                </div>
             </Form.Item>
             <Form.Item
@@ -167,36 +146,6 @@ const AddProduct = () => {
                rules={[{ required: true, message: 'Please input product description!' }]}
             >
                <Input.TextArea />
-            </Form.Item>
-            <Form.Item
-               validateTrigger={'onBlur'}
-               label={'Color'}
-               hasFeedback
-               className='w-full'
-               name='color'
-               rules={[{ required: true, message: 'Please choose product color!' }]}
-            >
-               <ColorPicker
-                  onChange={(_, hex) => {
-                     form.setFieldValue('color', hex)
-                  }}
-               />
-            </Form.Item>
-            <Form.Item
-               validateTrigger={'onBlur'}
-               label={<label className='block'>Type Of Product</label>}
-               hasFeedback
-               className='w-full'
-               name='type'
-               rules={[{ required: true, message: 'Please choose one general type product!' }]}
-            >
-               <Radio.Group onChange={handleChangeRadio}>
-                  {types?.map((type, i) => (
-                     <Radio key={i} value={type._id} className='uppercase'>
-                        {type.name}
-                     </Radio>
-                  ))}
-               </Radio.Group>
             </Form.Item>
             <Form.Item
                validateTrigger={'onBlur'}

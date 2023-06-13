@@ -33,6 +33,7 @@ const CardProduct = ({
    return (
       <Link to={link} className={`block h-full relative ${className}`}>
          <img
+            loading='lazy'
             src={imgs[index].url}
             alt='img'
             className={` w-[200px]  aspect-square ${imgSize} duration-700`}

@@ -57,7 +57,7 @@ const Header = ({ logout }: Props) => {
    return (
       <header className='overflow-hidden w-full flex justify-between items-center py-1 px-14  z-30 text-primary bg-yellowW'>
          <Link to='/' className='w-[20%] flex items-center justify-center pb-2'>
-            <img src={logoWhiteLink} className='h-[70px] aspect-square scale-x-[2.5] scale-y-[2]' />
+            <img src={logoWhiteLink} className='h-[70px] aspect-square scale-x-[2.5] scale-y-[1.2]' />
          </Link>
          <nav className='flex items-center gap-10 flex-1 justify-center'>
             <Link to={'/new'} className='text-md font-semibold'>
