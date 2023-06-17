@@ -32,8 +32,6 @@ const beforeUpload = (file: RcFile) => {
 
 const ButtonUpLoad = ({ form, className }: Props) => {
    const [loading, setLoading] = useState(false)
-   const [previewOpen, setPreviewOpen] = useState(false)
-   const [previewImage, setPreviewImage] = useState('')
    const [files, setFiles] = useState<UploadFile[] | IImage[]>([])
    const uploadButton = (
       <div className='bg-primary rounded-lg min-w-[100px] p-2 font-semibold flex flex-col items-center justify-center text-white '>
@@ -41,14 +39,6 @@ const ButtonUpLoad = ({ form, className }: Props) => {
          <div className='text-sm'>Upload from your device</div>
       </div>
    )
-   const handlePreview = async (file: UploadFile) => {
-      if (!file.url && !file.preview) {
-         file.preview = await getBase64(file.originFileObj as RcFile)
-      }
-      setPreviewImage(file.url || (file.preview as string))
-      setPreviewOpen(true)
-   }
-   const handleCancel = () => setPreviewOpen(false)
    const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
       form.setFieldValue('images', newFileList)
       setFiles(newFileList)
@@ -58,18 +48,12 @@ const ButtonUpLoad = ({ form, className }: Props) => {
          name='images'
          className={className}
          beforeUpload={beforeUpload}
-         onPreview={handlePreview}
          onChange={handleChange}
          fileList={files as UploadFile[]}
          multiple
          maxCount={3}
       >
-         <div className='flex justify-start gap-3 flex-wrap w-full'>
-            {files!.length >= 3 ? null : uploadButton}
-            <Modal footer={null} onCancel={handleCancel} open={previewOpen}>
-               <img alt='example' style={{ width: '100%' }} src={previewImage} />
-            </Modal>
-         </div>
+         <div className='flex justify-start gap-3 flex-wrap w-full'>{files!.length >= 3 ? null : uploadButton}</div>
       </Upload>
    )
 }

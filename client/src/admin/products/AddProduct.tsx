@@ -1,17 +1,6 @@
-import {
-   Button,
-   ConfigProvider,
-   Form,
-   Input,
-   Select,
-   InputNumber,
-   message,
-   Radio,
-   RadioChangeEvent,
-   ColorPicker
-} from 'antd'
+import { Button, ConfigProvider, Form, Input, Select, InputNumber, message } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux/hooks'
@@ -26,6 +15,8 @@ import ModalUpload from '../../components/Modal/ModalUpload/ModalUpload'
 import { IImage } from '../../interface/image'
 import FileImage from '../../components/Modal/ModalUpload/FileImage'
 import useTriggerUpload from '../../hooks/useTriggerUpload'
+import { TypeForm, configs } from '../../configAntd/configForm'
+import FormInput from '../../components/FormInput/FormInput'
 
 const onFinishFailed = (errorInfo: any) => {
    console.log('Failed:', errorInfo)
@@ -33,6 +24,7 @@ const onFinishFailed = (errorInfo: any) => {
 
 const AddProduct = () => {
    const { colorPrimary } = useMyToken()
+   const [typeForm, setTypeForm] = useState<TypeForm>('bouquet')
    const { isOpen, setIsOpen, handleCloseModal, handleOnAdd } = useTriggerUpload()
    const [isLoading, setIsLoading] = useState(false)
    const [categories, setCategories] = useState<ICategory[]>([])
@@ -52,10 +44,20 @@ const AddProduct = () => {
    useEffect(() => {
       form.setFieldValue('images', imagesSelected)
    }, [imagesSelected])
+   useEffect(() => {
+      ;(async () => {
+         try {
+            const res = await getAllCategory()
+            setCategories(res.data.data)
+         } catch (err) {
+            console.log(err)
+         }
+      })()
+   }, [])
    const onFinish = async (values: IInputProduct) => {
       try {
          setIsLoading(true)
-         await addProduct(values)
+         await currentType?.onFinishAdd(values)
          setIsLoading(false)
          dispatch(imageSlice.actions.setImagesSelected([]))
          message.success('Add new product successfully!')
@@ -65,9 +67,31 @@ const AddProduct = () => {
          console.log(error)
       }
    }
+   const currentType = useMemo(() => {
+      const typeCurrentForm = configs.find((config) => config.name === typeForm)
+      if (typeCurrentForm) return typeCurrentForm
+   }, [typeForm])
+
+   const getValuesFromCusInput = useCallback((values: any, name: string) => {
+      const curValue = form.getFieldValue(name)
+      if (typeof curValue === 'object') {
+         if (Array.isArray(curValue)) {
+            form.setFieldValue(name, [...curValue, values])
+         }
+         form.setFieldValue(name, { ...curValue, values })
+      }
+      form.setFieldValue(name, values)
+   }, [])
    if (isLoading) return <Loading />
    return (
       <div className='w-full flex justify-center flex-col items-center'>
+         <Select placeholder='Type' className='w-full' onChange={(value) => setTypeForm(value)}>
+            {configs.map((config, index) => (
+               <Option key={index} value={config.name}>
+                  {config.name.toUpperCase()}
+               </Option>
+            ))}
+         </Select>
          <h2 className='p-5 font-semibold text-lg'>Add product</h2>
          <Form
             form={form}
@@ -168,6 +192,33 @@ const AddProduct = () => {
                   ))}
                </Select>
             </Form.Item>
+            {currentType &&
+               currentType.inputs.map((input, index) => {
+                  if (!input.cusInput) {
+                     return (
+                        <FormInput
+                           label={input.label}
+                           className='w-full'
+                           rules={input.rules}
+                           key={index}
+                           name={input.name}
+                        />
+                     )
+                  } else {
+                     return (
+                        <Form.Item
+                           hasFeedback
+                           label={input.label}
+                           className='w-full'
+                           rules={input.rules}
+                           key={index}
+                           name={input.name}
+                        >
+                           {input.cusInput(getValuesFromCusInput)}
+                        </Form.Item>
+                     )
+                  }
+               })}
             <Form.Item className='w-full' wrapperCol={{ offset: 8, span: 16 }}>
                <ConfigProvider
                   theme={{

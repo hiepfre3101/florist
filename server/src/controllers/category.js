@@ -6,7 +6,7 @@ dotenv.config()
 
 export const getAll = async (req, res) => {
    try {
-      const categories = await Category.find().populate('products')
+      const categories = await Category.find().populate('bouquets')
       if (categories.length === 0) {
          return res.status(201).json({
             message: 'Không có danh muc nào',
