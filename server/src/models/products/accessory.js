@@ -4,7 +4,6 @@ const accessorySchema = new mongoose.Schema(
    {
       name: String,
       price: Number,
-      materials: [{ type: String }],
       images: [
          {
             type: mongoose.Schema.Types.ObjectId,

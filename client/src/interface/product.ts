@@ -1,5 +1,3 @@
-import { ProductInCart } from './cart'
-import { UploadFile } from 'antd'
 import { IImage } from './image'
 import { ICategory } from './category'
 import { ITypeOfProduct } from './type'
@@ -8,9 +6,15 @@ export interface IProduct {
    _id: string
    price: number
    name: string
+   ingredients?: {
+      flower: {
+         _id: string
+         name: string
+      }
+      quantity: number
+   }[]
    images: IImage[]
    description: string
-   type: ITypeOfProduct
    categories: ICategory[]
 }
 export interface IInputProduct {
@@ -18,7 +22,8 @@ export interface IInputProduct {
    price: number
    description: string
    images: string[]
-   type: string
+   ingredients?: IngredientInput[]
+   materials?: string[]
    categories: string[]
    color: string
 }
@@ -33,4 +38,10 @@ export interface IDataResponse {
       limit: number
       totalDocs: number
    }
+}
+export interface IngredientInput {
+   flower: string
+   quantity: number
+   selectValue?: string
+   inputValue?: number
 }

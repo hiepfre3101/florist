@@ -20,7 +20,7 @@ export const logoWhiteLink =
 const Header = ({ logout }: Props) => {
    const isLogin = useAppSelector(selectAuthStatus)
    const user = useAppSelector(selectorUser)
-   const items = itemsNavClient({ logout })
+   const items = itemsNavClient({ logout, role: user.role })
    const { data: cart, refetch } = useGetCartQuery(user._id)
    const { token } = theme.useToken()
    const accessToken = useAppSelector(selectorToken)

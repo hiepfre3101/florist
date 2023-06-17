@@ -66,7 +66,7 @@ const Login = ({ status, onChangeStatus }: Props) => {
                name='email'
                rules={[
                   { required: true, message: 'Please input your email!' },
-                  { type: 'email', message: 'Please input valid email!' }
+                  { type: 'email', message: 'Please input valid email!' },
                ]}
             >
                <Input className='rounded-sm p-3 text-[1rem] outline-none' />

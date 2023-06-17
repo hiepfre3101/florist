@@ -6,10 +6,10 @@ const categorySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "type",
   },
-  products: [
+  bouquets: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "bouqet",
+      ref: "Bouquet",
     },
   ],
 });

@@ -5,7 +5,7 @@ import { flowerSchema } from '../../schemas/products/flower.js'
 dotenv.config()
 
 export const getAll = async (req, res) => {
-   const { _limit = 10, _sort = 'name', _order = 'ascend', _page = 1, _q = '' } = req.query
+   const { _limit = 100, _sort = 'name', _order = 'ascend', _page = 1, _q = '' } = req.query
    const options = {
       sort: { [_sort]: _order === 'descend' ? -1 : 1 },
       limit: _limit,
