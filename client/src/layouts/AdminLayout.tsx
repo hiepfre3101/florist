@@ -70,7 +70,7 @@ const AdminLayout = ({ logout }: Props) => {
             navigate('/auth')
          }
       })()
-   }, [])
+   }, [isLogin])
    useEffect(() => {
       adminSocket.open()
       adminSocket.on('connect', () => {

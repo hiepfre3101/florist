@@ -4,6 +4,7 @@ const flowerSchema = new mongoose.Schema(
    {
       name: String,
       price: Number,
+      type:String,
       bouquets: [
          {
             type: mongoose.Schema.Types.ObjectId,

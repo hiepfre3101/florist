@@ -4,6 +4,7 @@ const cusBouquetSchema = new mongoose.Schema(
    {
       name: String,
       price: Number,
+      type:String,
       userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
       ingredients: [
          {

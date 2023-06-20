@@ -15,8 +15,9 @@ import ModalUpload from '../../components/Modal/ModalUpload/ModalUpload'
 import { IImage } from '../../interface/image'
 import FileImage from '../../components/Modal/ModalUpload/FileImage'
 import useTriggerUpload from '../../hooks/useTriggerUpload'
-import { TypeForm, configs } from '../../configAntd/configForm'
+import { TypeForm, configs } from '../../configAntd/custom-form/configForm'
 import FormInput from '../../components/FormInput/FormInput'
+import SelectMultiple from '../../components/SelectMultiple/SelectMultiple'
 
 const onFinishFailed = (errorInfo: any) => {
    console.log('Failed:', errorInfo)
@@ -57,7 +58,7 @@ const AddProduct = () => {
    const onFinish = async (values: IInputProduct) => {
       try {
          setIsLoading(true)
-         await currentType?.onFinishAdd(values)
+         await currentType?.onFinishAdd({ ...values, type: currentType.name })
          setIsLoading(false)
          dispatch(imageSlice.actions.setImagesSelected([]))
          message.success('Add new product successfully!')
@@ -72,16 +73,19 @@ const AddProduct = () => {
       if (typeCurrentForm) return typeCurrentForm
    }, [typeForm])
 
-   const getValuesFromCusInput = useCallback((values: any, name: string) => {
-      const curValue = form.getFieldValue(name)
-      if (typeof curValue === 'object') {
-         if (Array.isArray(curValue)) {
-            form.setFieldValue(name, [...curValue, values])
+   const getValuesFromCusInput = useCallback(
+      (values: any, name: string) => {
+         const curValue = form.getFieldValue(name)
+         if (typeof curValue === 'object') {
+            if (Array.isArray(curValue)) {
+               form.setFieldValue(name, [...curValue, values])
+            }
+            form.setFieldValue(name, { ...curValue, values })
          }
-         form.setFieldValue(name, { ...curValue, values })
-      }
-      form.setFieldValue(name, values)
-   }, [])
+         form.setFieldValue(name, values)
+      },
+      [typeForm]
+   )
    if (isLoading) return <Loading />
    return (
       <div className='w-full flex justify-center flex-col items-center'>
@@ -205,18 +209,8 @@ const AddProduct = () => {
                         />
                      )
                   } else {
-                     return (
-                        <Form.Item
-                           hasFeedback
-                           label={input.label}
-                           className='w-full'
-                           rules={input.rules}
-                           key={index}
-                           name={input.name}
-                        >
-                           {input.cusInput(getValuesFromCusInput)}
-                        </Form.Item>
-                     )
+                     const CusInput = input.cusInput
+                     return <CusInput getValue={getValuesFromCusInput} key={index} />
                   }
                })}
             <Form.Item className='w-full' wrapperCol={{ offset: 8, span: 16 }}>

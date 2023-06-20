@@ -1,5 +1,6 @@
 import instance from '../config'
 import { IInputProduct } from '../../interface/product'
+import { TypeForm } from '../../configAntd/custom-form/configForm'
 
 type IQuery = {
    limit?: number
@@ -7,8 +8,8 @@ type IQuery = {
    order?: 'asc' | 'desc'
    page?: number
 }
-export const getAllProduct = ({ limit, sort, order, page }: IQuery) => {
-   return instance.get(`/products`, {
+export const getAllProduct = ({ limit, sort, order, page }: IQuery, type: TypeForm) => {
+   return instance.get(`/${type}`, {
       params: {
          _limit: limit,
          _sort: sort,

@@ -4,6 +4,7 @@ const bouquetSchema = new mongoose.Schema(
    {
       name: String,
       price: Number,
+      type:String,
       ingredients: [
          {
             flower: { type: mongoose.Schema.Types.ObjectId, ref: 'Flower' },

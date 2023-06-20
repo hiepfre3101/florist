@@ -1,6 +1,7 @@
 import { IImage } from './image'
 import { ICategory } from './category'
 import { ITypeOfProduct } from './type'
+import { TypeForm } from '../configAntd/custom-form/configForm'
 
 export interface IProduct {
    _id: string
@@ -25,7 +26,7 @@ export interface IInputProduct {
    ingredients?: IngredientInput[]
    materials?: string[]
    categories: string[]
-   color: string
+   type: TypeForm
 }
 
 export interface IDataResponse {

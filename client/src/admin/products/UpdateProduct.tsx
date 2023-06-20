@@ -17,7 +17,7 @@ import FileImage from '../../components/Modal/ModalUpload/FileImage'
 import { getOneProduct } from '../../api/product/product'
 import { IUser } from '../../interface/user'
 import useTriggerUpload from '../../hooks/useTriggerUpload'
-import { ITypeOfProduct } from '../../interface/type'
+
 
 const onFinishFailed = (errorInfo: any) => {
    console.log('Failed:', errorInfo)
@@ -27,7 +27,6 @@ const UpdateProduct = () => {
    const { colorPrimary } = useMyToken()
    const { isOpen, setIsOpen, handleCloseModal, handleOnAdd } = useTriggerUpload()
    const [isLoading, setIsLoading] = useState(false)
-   const [types, setTypes] = useState<ITypeOfProduct[]>([])
    const [categories, setCategories] = useState<ICategory[]>([])
    const navigate = useNavigate()
    const [form] = Form.useForm<IInputProduct>()
@@ -62,11 +61,7 @@ const UpdateProduct = () => {
          }
       })()
    }, [])
-   const handleChangeRadio = (e: RadioChangeEvent) => {
-      form.setFieldValue('type', e.target.value)
-      const typeChecked = types.find((type) => type._id === e.target.value)
-      setCategories(typeChecked?.subCategories!)
-   }
+   
    const onFinish = async (values: IInputProduct) => {
       try {
          setIsLoading(true)
@@ -161,22 +156,6 @@ const UpdateProduct = () => {
                rules={[{ required: true, message: 'Please input product description!' }]}
             >
                <Input.TextArea />
-            </Form.Item>
-            <Form.Item
-               validateTrigger={'onBlur'}
-               label={<label className='block'>Type Of Product</label>}
-               hasFeedback
-               className='w-full'
-               name='type'
-               rules={[{ required: true, message: 'Please choose one general type product!' }]}
-            >
-               <Radio.Group onChange={handleChangeRadio}>
-                  {types?.map((type, i) => (
-                     <Radio key={i} value={type._id} className='uppercase'>
-                        {type.name}
-                     </Radio>
-                  ))}
-               </Radio.Group>
             </Form.Item>
             <Form.Item
                validateTrigger={'onBlur'}
