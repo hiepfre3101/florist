@@ -1,10 +1,10 @@
 import { Rule } from 'antd/es/form'
-import { ReactNode } from 'react'
-import SelectMultiple from '../components/SelectMultiple/SelectMultiple'
-import { addFlower, getAllFlower } from '../api/product/flower'
-import { IInputProduct, IProduct, IngredientInput } from '../interface/product'
-import { addBouquet } from '../api/product/bouquet'
+import { NamedExoticComponent, ReactNode } from 'react'
+import { addFlower } from '../../api/product/flower'
+import { IInputProduct, IngredientInput } from '../../interface/product'
+import { addBouquet } from '../../api/product/bouquet'
 import { AxiosResponse } from 'axios'
+import { ParentIngredientInput } from './parents-cusInput'
 
 export type TypeForm = 'bouquet' | 'flower' | 'accessory'
 export type AtrInput = {
@@ -13,6 +13,10 @@ export type AtrInput = {
    name: string
    rules: Rule[]
 }
+export type PropsCusInput = {
+   getValue?: (values: any, name: string) => void
+   defaultValue?: any
+}
 type ConfigFormInput = {
    name: TypeForm
    inputs: {
@@ -20,7 +24,7 @@ type ConfigFormInput = {
       className: string
       name: string
       rules: Rule[]
-      cusInput?: (getValue?: (values: any, name: string) => void) => JSX.Element
+      cusInput?: NamedExoticComponent<PropsCusInput>
    }[]
    onFinishAdd: (values: IInputProduct) => Promise<AxiosResponse<any, any>>
 }
@@ -46,17 +50,7 @@ const configBouquet: ConfigFormInput = {
          className: 'w-full',
          name: 'ingredients',
          rules: [{ required: true, message: 'Please add ingredients!' }],
-         cusInput: (getValue) => (
-            <SelectMultiple
-               name='ingredients'
-               getValues={(values, name) => {
-                  if (getValue) getValue(values, name)
-               }}
-               apiHandler={getAllFlower}
-               placeholder='Choose Ingredients'
-               paramsApi={{ limit: 100, sort: 'createAt', page: 1, order: 'asc' }}
-            />
-         )
+         cusInput: ParentIngredientInput
       }
    ],
    onFinishAdd: onFinishBouquet

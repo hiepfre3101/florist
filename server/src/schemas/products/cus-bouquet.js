@@ -2,6 +2,7 @@ import Joi from 'joi'
 
 export const flowerSchema = Joi.object({
    name: Joi.string().required(),
+   type: Joi.string().required(),
    price: Joi.number().required(),
    userId: Joi.string().required(),
    ingredients: Joi.array().required(),
