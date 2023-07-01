@@ -16,4 +16,4 @@ const FormInput = ({ label, className, name, rules }: Props) => {
    )
 }
 
-export default FormInput
+export default React.memo(FormInput)

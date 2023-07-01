@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
    DesktopOutlined,
    PieChartOutlined,
@@ -52,7 +52,7 @@ const AdminLayout = ({ logout }: Props) => {
    const { colorBgContainer, colorText, colorPrimary, colorLinkActive } = useMyToken()
    const isLogin = useAppSelector(selectAuthStatus)
    const user = useAppSelector(selectorUser)
-   const items = itemsNavClient({ logout, role: user.role })
+   const items = useMemo(() => itemsNavClient({ logout, role: user.role }), [isLogin])
    const dispatch = useAppDispatch()
    const navigate = useNavigate()
    useEffect(() => {
@@ -66,11 +66,14 @@ const AdminLayout = ({ logout }: Props) => {
             dispatch(authSlice.actions.setUser(JSON.parse(userExist!)))
             dispatch(authSlice.actions.token(token))
          } else {
+            dispatch(authSlice.actions.login(false))
+            dispatch(authSlice.actions.setUser({}))
+            dispatch(authSlice.actions.token(''))
             message.error('Login Expired!')
             navigate('/auth')
          }
       })()
-   }, [isLogin])
+   }, [])
    useEffect(() => {
       adminSocket.open()
       adminSocket.on('connect', () => {

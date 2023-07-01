@@ -27,7 +27,7 @@ export const getAll = async (req, res) => {
          options
       )
       if (products.docs.length === 0) {
-         return res.status(404).json({
+         return res.status(201).json({
             message: 'Không có sản phẩm nào',
             data: []
          })
@@ -49,7 +49,8 @@ export const getOne = async (req, res) => {
             path: 'categories',
             select: 'name'
          },
-         { path: 'images' }
+         { path: 'images' },
+         { path: 'ingredients.flower', select: ['name', 'images'] }
       ])
       if (!product) {
          return res.json({

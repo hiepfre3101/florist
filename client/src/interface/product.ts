@@ -1,6 +1,5 @@
 import { IImage } from './image'
 import { ICategory } from './category'
-import { ITypeOfProduct } from './type'
 import { TypeForm } from '../configAntd/custom-form/configForm'
 
 export interface IProduct {
@@ -29,7 +28,7 @@ export interface IInputProduct {
    type: TypeForm
 }
 
-export interface IDataResponse {
+export interface IProductResponse {
    message: string
    data: {
       docs: IProduct[]

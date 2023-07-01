@@ -84,8 +84,11 @@ const ModalUpload = ({ isOpen, onClose, onAdd }: Props) => {
          maskStyle={{ minHeight: 'screen', paddingBottom: '2rem' }}
          className=' min-w-[80%] top-[5%]  min-h-[50%] rounded-lg '
       >
-         <div className='relative p-3 pb-5 border-b-[1px] border-gray-300 '>
+         <div className='relative p-3 pb-5 border-b-[1px] border-gray-300 flex justify-start items-center gap-5'>
             <p className='text-2xl font-semibold'>Select Image</p>
+            <p className='absolute left-[30%] ps-7 text-[rgba(0,0,0,0.4)]'>
+               Hold <kbd className='p-2 rounded-md bg-slate-200'>Ctrl + click</kbd> to select multiple
+            </p>
             <button
                onClick={onClose}
                className='duration-300 hover:bg-gray-100 p-3  rounded-full w-[50px] h-[50px] flex items-center justify-center text-gray-500 absolute top-2 right-5'

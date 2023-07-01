@@ -6,7 +6,7 @@ export const store = configureStore({
    reducer: {
       [hoaApi.reducerPath]: hoaApi.reducer,
       auth: authReducer,
-      images: imageReducer
+      images: imageReducer,
    },
    //add middleware to enable caching, invalidation, polling of rtk query
    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(hoaApi.middleware)

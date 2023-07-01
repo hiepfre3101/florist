@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { BrowserRouter, useOutletContext, useNavigate } from 'react-router-dom'
 import { Route, Routes } from 'react-router'
 
@@ -35,14 +34,6 @@ function App() {
          console.log(error)
       }
    }
-   useEffect(() => {
-      const token = localStorage.getItem('token')
-      const userExist = localStorage.getItem('user')
-      if (token) {
-         dispatch(authSlice.actions.login(true))
-         dispatch(authSlice.actions.setUser(JSON.parse(userExist!)))
-      }
-   }, [])
    return (
       <div className='App max-w-[1920px] my-0 mx-auto'>
          {contextHolder}

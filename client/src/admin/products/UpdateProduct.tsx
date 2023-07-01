@@ -1,23 +1,22 @@
-import { Button, ConfigProvider, Form, Input, Select, InputNumber, message, Radio, RadioChangeEvent } from 'antd'
+import { Button, ConfigProvider, Form, Input, Select, InputNumber, message } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux/hooks'
 import { imageSlice, allPropertiesSelector } from '../../slices/imageSlice'
 import useMyToken from '../../hooks/useMyToken'
 import { ICategory } from '../../interface/category'
 import { getAllCategory } from '../../api/category/category'
-import { addProduct, updateProduct } from '../../api/product/product'
+import { getOneProduct, updateProduct } from '../../api/product/product'
 import Loading from '../../components/Loading/Loading'
 import { IInputProduct } from '../../interface/product'
 import ModalUpload from '../../components/Modal/ModalUpload/ModalUpload'
 import { IImage } from '../../interface/image'
 import FileImage from '../../components/Modal/ModalUpload/FileImage'
-import { getOneProduct } from '../../api/product/product'
-import { IUser } from '../../interface/user'
 import useTriggerUpload from '../../hooks/useTriggerUpload'
-
+import { TypeForm, configs } from '../../configAntd/custom-form/configForm'
+import FormInput from '../../components/FormInput/FormInput'
 
 const onFinishFailed = (errorInfo: any) => {
    console.log('Failed:', errorInfo)
@@ -26,14 +25,19 @@ const onFinishFailed = (errorInfo: any) => {
 const UpdateProduct = () => {
    const { colorPrimary } = useMyToken()
    const { isOpen, setIsOpen, handleCloseModal, handleOnAdd } = useTriggerUpload()
+   const [typeForm, setTypeForm] = useState<TypeForm>('bouquet')
    const [isLoading, setIsLoading] = useState(false)
    const [categories, setCategories] = useState<ICategory[]>([])
    const navigate = useNavigate()
    const [form] = Form.useForm<IInputProduct>()
    const { id } = useParams()
    const dispatch = useAppDispatch()
-   const { images, listId, imagesSelected } = useAppSelector(allPropertiesSelector)
+   const { images, imagesSelected } = useAppSelector(allPropertiesSelector)
    const { Option } = Select
+   const currentType = useMemo(() => {
+      const typeCurrentForm = configs.find((config) => config.name === typeForm)
+      if (typeCurrentForm) return typeCurrentForm
+   }, [typeForm])
    const layout = {
       labelCol: {
          span: 5
@@ -42,26 +46,46 @@ const UpdateProduct = () => {
          span: 16
       }
    }
+   const type: TypeForm | null = new URLSearchParams(useLocation().search).get('type') as TypeForm
+   useEffect(() => {
+      ;(async () => {
+         if (type === null) {
+            navigate('/admin/products')
+         }
+         try {
+            const {
+               data: { data }
+            } = await getOneProduct(id, type)
+            const imagesList = data?.images.map((img: IImage) => img._id)
+            const imagesOfUser = JSON.parse(localStorage.getItem('user') as string)?.images
+            const categoriesOfProduct = data?.categories.map((cate: ICategory) => cate._id)
+            dispatch(imageSlice.actions.setImages(imagesOfUser))
+            dispatch(imageSlice.actions.setImagesSelected(imagesList))
+            setTypeForm(data?.type)
+            form.setFieldsValue({ ...data, categories: categoriesOfProduct, images: imagesList })
+         } catch (error) {
+            dispatch(imageSlice.actions.setImages([]))
+            dispatch(imageSlice.actions.setImagesSelected([]))
+            message.error('Something wrong!')
+            navigate('/admin/products')
+            console.log(error)
+         }
+      })()
+   }, [])
    useEffect(() => {
       form.setFieldValue('images', imagesSelected)
    }, [imagesSelected])
    useEffect(() => {
       ;(async () => {
          try {
-            const {
-               data: { data }
-            } = await getOneProduct(id)
-            const imagesList = data?.images.map((img: IImage) => img._id)
-            const imagesOfUser = JSON.parse(localStorage.getItem('user') as string)?.images
-            dispatch(imageSlice.actions.setImages(imagesOfUser))
-            dispatch(imageSlice.actions.setImagesSelected(imagesList))
-            form.setFieldsValue({ ...data, categories: [], images: imagesList })
-         } catch (error) {
-            console.log(error)
+            const res = await getAllCategory()
+            setCategories(res.data.data)
+         } catch (err) {
+            console.log(err)
          }
       })()
    }, [])
-   
+
    const onFinish = async (values: IInputProduct) => {
       try {
          setIsLoading(true)
@@ -75,6 +99,19 @@ const UpdateProduct = () => {
          console.log(error)
       }
    }
+   const getValuesFromCusInput = useCallback(
+      (values: any, name: string) => {
+         const curValue = form.getFieldValue(name)
+         if (typeof curValue === 'object') {
+            if (Array.isArray(curValue)) {
+               form.setFieldValue(name, [...curValue, values])
+            }
+            form.setFieldValue(name, { ...curValue, values })
+         }
+         form.setFieldValue(name, values)
+      },
+      [typeForm]
+   )
    if (isLoading) return <Loading />
    return (
       <div className='w-full flex justify-center flex-col items-center'>
@@ -137,14 +174,14 @@ const UpdateProduct = () => {
                      ))}
                   {imagesSelected.length < 3 && (
                      <div
-                        className='border-gray-400 hover:bg-gray-200 duration-300 border p-5 w-[30%] rounded-lg cursor-pointer'
+                        className='border-gray-400 hover:bg-gray-200 duration-300 border p-5 w-[20%] rounded-lg cursor-pointer'
                         onClick={() => setIsOpen(true)}
                      >
                         {<PlusOutlined rev='' />}
                         <div>Select images</div>
                      </div>
                   )}
-                  <ModalUpload isOpen={isOpen} onClose={handleCloseModal} onAdd={handleOnAdd} />
+                  {isOpen && <ModalUpload isOpen={isOpen} onClose={handleCloseModal} onAdd={handleOnAdd} />}
                </div>
             </Form.Item>
             <Form.Item
@@ -170,6 +207,7 @@ const UpdateProduct = () => {
                   style={{ width: '100%' }}
                   placeholder='Choose categories'
                   optionLabelProp='label'
+                  value={form.getFieldValue('categories')}
                >
                   {categories?.map((category, index) => (
                      <Option key={index} value={category._id} label={category.name}>
@@ -178,6 +216,30 @@ const UpdateProduct = () => {
                   ))}
                </Select>
             </Form.Item>
+            {currentType &&
+               currentType.inputs.map((input, index) => {
+                  if (!input.cusInput) {
+                     return (
+                        <FormInput
+                           label={input.label}
+                           className='w-full'
+                           rules={input.rules}
+                           key={index}
+                           name={input.name}
+                        />
+                     )
+                  } else {
+                     const CusInput = input.cusInput
+                     return (
+                        <CusInput
+                           getValue={getValuesFromCusInput}
+                           key={index}
+                           defaultValue={form.getFieldValue(input.name)}
+                           //need to check
+                        />
+                     )
+                  }
+               })}
             <Form.Item className='w-full' wrapperCol={{ offset: 8, span: 16 }}>
                <ConfigProvider
                   theme={{

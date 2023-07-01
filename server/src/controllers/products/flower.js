@@ -38,6 +38,7 @@ export const getAll = async (req, res) => {
       })
    }
 }
+'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia sit dolorum consequuntur perferendis, reiciendis quae ex minus aspernatur incidunt veniam. Commodi fugiat sapiente est beatae incidunt soluta necessitatibus qui impedit.'
 export const getOne = async (req, res) => {
    try {
       const product = await Flower.findOne({ _id: req.params.id }).populate([

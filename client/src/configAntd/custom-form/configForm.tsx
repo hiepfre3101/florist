@@ -4,9 +4,10 @@ import { addFlower } from '../../api/product/flower'
 import { IInputProduct, IngredientInput } from '../../interface/product'
 import { addBouquet } from '../../api/product/bouquet'
 import { AxiosResponse } from 'axios'
-import { ParentIngredientInput } from './parents-cusInput'
+import { ParentIngredientInput } from './parentCusInput'
 
-export type TypeForm = 'bouquet' | 'flower' | 'accessory'
+// Important : TypeForm is the types of product to call api, display form...
+export type TypeForm = 'bouquet' | 'flower' | 'accessory' 
 export type AtrInput = {
    label: string | ReactNode
    className: string
@@ -17,7 +18,7 @@ export type PropsCusInput = {
    getValue?: (values: any, name: string) => void
    defaultValue?: any
 }
-type ConfigFormInput = {
+export type ConfigFormInput = {
    name: TypeForm
    inputs: {
       label: string | ReactNode
