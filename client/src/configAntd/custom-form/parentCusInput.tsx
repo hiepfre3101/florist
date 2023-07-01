@@ -1,11 +1,17 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import SelectMultiple from '../../components/SelectMultiple/SelectMultiple'
 import { IQuery, getAllFlower } from '../../api/product/flower'
 import { PropsCusInput } from './configForm'
 import { Form } from 'antd'
+
+
 export const ParentIngredientInput = React.memo(({ getValue, defaultValue }: PropsCusInput) => {
    const paramsApi: IQuery = { limit: 100, sort: 'createAt', page: 1, order: 'asc' }
    const apiGetFlowers = useCallback(() => getAllFlower(paramsApi), [])
+   const tranformDefaultData = useMemo(
+      () => defaultValue?.map((item: any) => ({ itemAdded: item.flower, quantity: item.quantity })),
+      [defaultValue]
+   )
    return (
       <Form.Item
          hasFeedback
@@ -21,7 +27,7 @@ export const ParentIngredientInput = React.memo(({ getValue, defaultValue }: Pro
             }}
             apiHandler={apiGetFlowers}
             placeholder='Choose Ingredients'
-            defaultData={defaultValue}
+            defaultData={tranformDefaultData}
          />
       </Form.Item>
    )

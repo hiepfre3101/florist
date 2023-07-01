@@ -20,8 +20,8 @@ export const getAllProduct = ({ limit, sort, order, page }: IQuery, type: TypeFo
    })
 }
 
-export const getOneProduct = (id: string | undefined) => {
-   return instance.get(`/products/${id}`)
+export const getOneProduct = (id: string | undefined,type: TypeForm) => {
+   return instance.get(`/${type}/${id}`)
 }
 
 export const deleteProduct = (id: string | undefined) => {

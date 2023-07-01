@@ -1,13 +1,12 @@
 import React from 'react'
 import { Avatar, List } from 'antd'
 type Props = {
-   data: { listData: any[] }[]
+   data: { itemAdded: any[] }[]
    onRemove?: (id: string) => void
 }
 
 function ListItem<T>({ data, onRemove }: Props) {
-   console.log('render')
-   if (data.length === 0) return <>No Data</>
+   if (data?.length === 0 || data === undefined) return <>No Data</>
    return (
       <div className='w-full max-h-[400px] overflow-auto'>
          <List itemLayout='horizontal'>
@@ -17,7 +16,7 @@ function ListItem<T>({ data, onRemove }: Props) {
                   actions={
                      onRemove
                         ? [
-                             <p className='cursor-pointer' onClick={() => onRemove(item?.listData._id)}>
+                             <p className='cursor-pointer' onClick={() => onRemove(item?.itemAdded._id)}>
                                 Remove
                              </p>
                           ]
@@ -25,11 +24,10 @@ function ListItem<T>({ data, onRemove }: Props) {
                   }
                >
                   <List.Item.Meta
-                     avatar={<Avatar src={item?.listData?.images[0]?.url} />}
-                     title={<p>{item?.listData.name}</p>}
-                  >
-                  </List.Item.Meta>
-                     <p className='font-semibold'>x{item?.quantity}</p>
+                     avatar={<Avatar src={item?.itemAdded?.images[0]?.url} />}
+                     title={<p>{item?.itemAdded?.name}</p>}
+                  ></List.Item.Meta>
+                  <p className='font-semibold'>x{item?.quantity}</p>
                </List.Item>
             ))}
          </List>

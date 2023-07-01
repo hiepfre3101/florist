@@ -1,23 +1,23 @@
 import { InputNumber, Select, message } from 'antd'
 import { AxiosResponse } from 'axios'
-import { useEffect, useState, memo, useCallback } from 'react'
+import { useEffect, useState, memo, useCallback, useMemo } from 'react'
 import { IQuery } from '../../api/product/flower'
 import ListItem from '../List/ListItem'
 
-type Props<T> = {
-   apiHandler: (params?: any) => Promise<AxiosResponse<any, any>>
-   defaultData?: []
+type Props = {
+   apiHandler: () => Promise<AxiosResponse<any, any>>
+   defaultData: any[]
    placeholder: string
    name: string
    getValues?: (values: any[], name: string) => void
 }
 
-const SelectMultiple = <T,>({ apiHandler, placeholder, getValues, name, defaultData }: Props<T>) => {
+const SelectMultiple = ({ apiHandler, placeholder, getValues, name, defaultData }: Props) => {
    const [data, setData] = useState<any[]>([])
-   const [selectValue, setSelectValue] = useState<any>()
-   const [inputValue, setInputValue] = useState<any>()
+   const [selectValue, setSelectValue] = useState<any>('')
+   const [inputValue, setInputValue] = useState<any>('')
    const [values, setValues] = useState<any>([])
-   const [addedList, setAddedList] = useState<any[]>(defaultData && defaultData.length > 0 ? defaultData : [])
+   const [addedList, setAddedList] = useState<any[]>(defaultData ? defaultData : [])
    useEffect(() => {
       ;(async () => {
          try {
@@ -33,15 +33,19 @@ const SelectMultiple = <T,>({ apiHandler, placeholder, getValues, name, defaultD
       const dataReturn = [...values, { selectValue, inputValue }]
       if (getValues && inputValue !== '' && selectValue !== '') {
          setValues([...values, { selectValue, inputValue }])
+         setAddedList([
+            ...addedList,
+            { itemAdded: data.find((item) => item._id === selectedValue), quantity: inputValue }
+         ])
+
          getValues(dataReturn, name)
+         setInputValue('')
+         setSelectValue('')
       }
-      setAddedList([...addedList, { listData: data.find((item) => item._id === selectedValue), quantity: inputValue }])
-      setInputValue('')
-      setSelectValue('')
    }
    const handleRemoveItem = useCallback(
       (id: string) => {
-         setAddedList([...addedList.filter((item) => item?.listData._id !== id)])
+         setAddedList([...addedList.filter((item: any) => item?.itemAdded._id !== id)])
       },
       [addedList]
    )

@@ -4,13 +4,11 @@ import useMyToken from '../../hooks/useMyToken'
 import { useNavigate } from 'react-router-dom'
 import { addCategory } from '../../api/category/category'
 import Loading from '../../components/Loading/Loading'
-import { ITypeOfProduct } from '../../interface/type'
 
 const onFinishFailed = (errorInfo: any) => {
    console.log('Failed:', errorInfo)
 }
 const AddCategory = () => {
-   const [types, setTypes] = useState<ITypeOfProduct[]>([])
    const { colorPrimary } = useMyToken()
    const [isLoading, setIsLoading] = useState(false)
    const navigate = useNavigate()
@@ -22,9 +20,6 @@ const AddCategory = () => {
       wrapperCol: {
          span: 16
       }
-   }
-   const handleChangeRadio = (e: RadioChangeEvent) => {
-      form.setFieldValue('type', e.target.value)
    }
    const onFinish = async (values: any) => {
       try {
@@ -61,22 +56,6 @@ const AddCategory = () => {
                rules={[{ required: true, message: 'Please input category name!' }]}
             >
                <Input />
-            </Form.Item>
-            <Form.Item
-               validateTrigger={'onBlur'}
-               label={<label className='block'>Type Of Product</label>}
-               hasFeedback
-               className='w-full'
-               name='type'
-               rules={[{ required: true, message: 'Please choose one general type product!' }]}
-            >
-               <Radio.Group onChange={handleChangeRadio}>
-                  {types?.map((type, i) => (
-                     <Radio key={i} value={type._id} className='uppercase'>
-                        {type.name}
-                     </Radio>
-                  ))}
-               </Radio.Group>
             </Form.Item>
             <Form.Item className='w-full' wrapperCol={{ offset: 8, span: 16 }}>
                <ConfigProvider

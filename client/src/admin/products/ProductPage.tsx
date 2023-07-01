@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { deleteProduct, getAllProduct } from '../../api/product/product'
-import { IDataResponse, IProduct } from '../../interface/product'
+import { IProductResponse, IProduct } from '../../interface/product'
 import { columnsProduct } from '../../configAntd/columnsTable'
 import { Table, message, Select } from 'antd'
 import { AxiosResponse } from 'axios'
@@ -28,7 +28,7 @@ const ProductsPage = () => {
       ;(async () => {
          try {
             setIsLoading(true)
-            const { data }: AxiosResponse<IDataResponse> = await getAllProduct(
+            const { data }: AxiosResponse<IProductResponse> = await getAllProduct(
                {
                   limit: 5,
                   page: tableParams.pagination?.current,
@@ -87,7 +87,7 @@ const ProductsPage = () => {
    const columns = useMemo(() => columnsProduct({ onDelete: removeItem }), [typeProduct])
    return (
       <div>
-         <Select placeholder='Type' className='w-full mb-5' onChange={(value) => setTypeProduct(value)}>
+         <Select placeholder='Bouquet' className='w-full mb-5' onChange={(value) => setTypeProduct(value)}>
             {types.map((type, index) => (
                <Select.Option key={index} value={type}>
                   {type.toUpperCase()}

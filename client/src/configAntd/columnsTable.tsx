@@ -3,6 +3,7 @@ import { Space, Table, Tag, Button, Popconfirm } from 'antd'
 import { Link } from 'react-router-dom'
 import { IProduct } from '../interface/product'
 import { ICategory } from '../interface/category'
+import { AnyAction, Dispatch } from 'redux'
 
 type agrColumns = {
    onDelete(id: string): Promise<void>
@@ -38,14 +39,6 @@ export const columnsProduct = ({ onDelete }: agrColumns): ColumnsType<IProduct> 
          key: 'price'
       },
       {
-         title: 'Type',
-         dataIndex: 'type',
-         key: 'type',
-         render: (_, { type }) => {
-            return <Tag color={'purple'}>{type && type.name}</Tag>
-         }
-      },
-      {
          title: 'Categories',
          key: 'categories',
          dataIndex: 'categories',
@@ -66,7 +59,7 @@ export const columnsProduct = ({ onDelete }: agrColumns): ColumnsType<IProduct> 
          key: 'action',
          render: (record) => (
             <Space size='middle'>
-               <Link to={`/admin/update-product/${record._id}`}>
+               <Link to={`/admin/update-product/${record._id}?type=${record?.type}`}>
                   <Button>Update</Button>
                </Link>
                <Popconfirm

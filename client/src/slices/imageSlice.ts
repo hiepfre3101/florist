@@ -26,11 +26,15 @@ export const imageSlice = createSlice({
          state.listOfIdMongo = action.payload
       },
       pushIdMongo: (state: IImageState, action) => {
-         state.listOfIdMongo.forEach((id) => {
-            if (id !== action.payload) {
-               state.listOfIdMongo = [...state.listOfIdMongo, action.payload]
-            }
-         })
+         if (state.listOfIdMongo.length === 0) {
+            state.listOfIdMongo = [...state.listOfIdMongo, action.payload]
+         } else {
+            state.listOfIdMongo.forEach((id) => {
+               if (id !== action.payload || !id) {
+                  state.listOfIdMongo = [...state.listOfIdMongo, action.payload]
+               }
+            })
+         }
       },
       pushImagesSelected: (state: IImageState, action) => {
          action.payload.forEach((id: string) => {

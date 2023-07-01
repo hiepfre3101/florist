@@ -95,7 +95,7 @@ const Header = ({ logout }: Props) => {
                   )}
                >
                   <Badge count={cart?.data?.products?.length} offset={[1, 7]} size='small' color='#ff9c60'>
-                     <ShoppingCartOutlined className='cursor-pointer text-2xl text-greenY' rev='' />
+                     <ShoppingCartOutlined className='cursor-pointer text-2xl text-greenY block mb-2' rev='' />
                   </Badge>
                </Dropdown>
             </Link>

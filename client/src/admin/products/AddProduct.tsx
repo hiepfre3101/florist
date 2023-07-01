@@ -17,7 +17,7 @@ import FileImage from '../../components/Modal/ModalUpload/FileImage'
 import useTriggerUpload from '../../hooks/useTriggerUpload'
 import { TypeForm, configs } from '../../configAntd/custom-form/configForm'
 import FormInput from '../../components/FormInput/FormInput'
-import SelectMultiple from '../../components/SelectMultiple/SelectMultiple'
+
 
 const onFinishFailed = (errorInfo: any) => {
    console.log('Failed:', errorInfo)
@@ -34,6 +34,11 @@ const AddProduct = () => {
    const dispatch = useAppDispatch()
    const { images, imagesSelected } = useAppSelector(allPropertiesSelector)
    const { Option } = Select
+   const currentType = useMemo(() => {
+      const typeCurrentForm = configs.find((config) => config.name === typeForm)
+      if (typeCurrentForm) return typeCurrentForm
+   }, [typeForm])
+
    const layout = {
       labelCol: {
          span: 5
@@ -45,6 +50,7 @@ const AddProduct = () => {
    useEffect(() => {
       form.setFieldValue('images', imagesSelected)
    }, [imagesSelected])
+
    useEffect(() => {
       ;(async () => {
          try {
@@ -55,6 +61,7 @@ const AddProduct = () => {
          }
       })()
    }, [])
+
    const onFinish = async (values: IInputProduct) => {
       try {
          setIsLoading(true)
@@ -68,10 +75,6 @@ const AddProduct = () => {
          console.log(error)
       }
    }
-   const currentType = useMemo(() => {
-      const typeCurrentForm = configs.find((config) => config.name === typeForm)
-      if (typeCurrentForm) return typeCurrentForm
-   }, [typeForm])
 
    const getValuesFromCusInput = useCallback(
       (values: any, name: string) => {
@@ -89,7 +92,7 @@ const AddProduct = () => {
    if (isLoading) return <Loading />
    return (
       <div className='w-full flex justify-center flex-col items-center'>
-         <Select placeholder='Type' className='w-full' onChange={(value) => setTypeForm(value)}>
+         <Select placeholder='Bouquet' className='w-full' onChange={(value) => setTypeForm(value)}>
             {configs.map((config, index) => (
                <Option key={index} value={config.name}>
                   {config.name.toUpperCase()}
@@ -210,7 +213,7 @@ const AddProduct = () => {
                      )
                   } else {
                      const CusInput = input.cusInput
-                     return <CusInput getValue={getValuesFromCusInput} key={index} />
+                     return <CusInput getValue={getValuesFromCusInput} key={index}  />
                   }
                })}
             <Form.Item className='w-full' wrapperCol={{ offset: 8, span: 16 }}>
