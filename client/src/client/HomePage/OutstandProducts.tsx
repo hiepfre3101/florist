@@ -8,8 +8,8 @@ import { TruckIcon } from '../../components/Icons/TruckIcon'
 import { GuardIcon } from '../../components/Icons/GuardIcon'
 
 const OutstandProducts = () => {
-   const { data, loading } = useListItem<IProduct[]>({ getList: getAllProduct, options: { limit: 5 } })
-   const { data: products } = useListItem<IProduct[]>({ getList: getAllProduct })
+   const { data, loading } = useListItem<IProduct[]>({ getList: getAllProduct, options: { limit: 5 }, type: 'bouquet' })
+   const { data: products } = useListItem<IProduct[]>({ getList: getAllProduct, type: 'bouquet' })
    if (loading) return <Loading sreenSize='lg' />
    return (
       <div className='w-[90%] p-5  my-0 mx-auto'>
@@ -23,7 +23,7 @@ const OutstandProducts = () => {
                      imgs={product?.images}
                      title={product?.name}
                      price={product?.price}
-                     link={`/${product?._id}`}
+                     link={`/${product?._id}?type=${product.type}`}
                      imgSize='w-full aspect-square'
                      titleSize={index === 1 ? 'text-xl' : 'text-sm'}
                      priceSize={index === 1 ? 'text-xl' : 'text-sm'}

@@ -29,9 +29,9 @@ const CarouselProduct = ({ products }: Props) => {
                   key={index}
                   imgs={product.images}
                   title={product.name}
-                  link={`/${product._id}`}
+                  link={`/${product._id}?type=${product.type}`}
                   price={product.price}
-                  category={product.type.name}
+                  category={''}
                   imgSize='w-full aspect-square'
                />
             ))}

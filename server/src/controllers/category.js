@@ -38,13 +38,9 @@ export const create = async (req, res) => {
             message: 'Thêm danh mục không thành công'
          })
       }
-      const typeUpdated = await Type.findByIdAndUpdate(req.body.type, {
-         $addToSet: { subCategories: category._id }
-      })
       return res.json({
          message: 'Thêm danh mục thành công',
-         category,
-         type: typeUpdated
+         category
       })
    } catch (error) {
       return res.status(400).json({
@@ -65,13 +61,9 @@ export const update = async (req, res) => {
             message: 'Cập nhật danh mục không thành công'
          })
       }
-      const typeUpdated = await Type.findByIdAndUpdate(req.body.type, {
-         $addToSet: { subCategories: category._id }
-      })
       res.json({
          message: 'Cập nhật danh mục thành công',
-         category,
-         type: typeUpdated
+         category
       })
    } catch (error) {
       return res.status(400).json({

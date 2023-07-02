@@ -7,6 +7,7 @@ import { Table } from 'antd'
 
 const CategoryPage = () => {
    const [categories, setCategories] = useState<ICategory[]>([] as ICategory[])
+   console.log(categories)
    const [isLoading, setIsLoading] = useState<boolean>(false)
    useEffect(() => {
       ;(async () => {
@@ -17,7 +18,7 @@ const CategoryPage = () => {
                return {
                   ...category,
                   key: category._id,
-                  quantity: category.products.length
+                  quantity: category.products ? category?.products?.length : 0
                }
             })
             setCategories(formatedCategories)

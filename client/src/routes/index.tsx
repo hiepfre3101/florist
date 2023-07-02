@@ -12,6 +12,7 @@ import Bouquet from '../client/Bouquet'
 import Flower from '../client/Flower'
 import AuthenForm from '../auth/AuthenForm'
 import Cart from '../components/Cart/Cart'
+import NotFoundPage from '../components/NotFoundPage'
 
 interface IRoute {
    path: string
@@ -41,6 +42,10 @@ export const clientRoutes: IRoute[] = [
    {
       path: '/cart',
       element: Cart
+   },
+   {
+      path: '/error',
+      element: NotFoundPage
    }
 ]
 
@@ -76,5 +81,9 @@ export const adminRoutes: IRoute[] = [
    {
       path: '/admin/test',
       element: Test
+   },
+   {
+      path: '/admin/error',
+      element: NotFoundPage
    }
 ]

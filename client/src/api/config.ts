@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { store } from '../store/store'
+import { message } from 'antd'
 
 const instance = axios.create({
    baseURL: 'http://localhost:5353/api',
@@ -20,4 +21,18 @@ instance.interceptors.request.use((config) => {
    }
    return config
 })
+
+instance.interceptors.response.use(
+   (value) => {
+      if (value.status === 401) {
+         message.error('Login again please!')
+      }
+      return value
+   },
+   (err) => {
+      message.error('Something wrong!')
+      location.assign('/error')
+      return Promise.reject(err)
+   }
+)
 export default instance
