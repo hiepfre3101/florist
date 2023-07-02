@@ -15,14 +15,16 @@ const ProductCart = ({ product, type }: Props) => {
    const navigate = useNavigate()
    const { removeProduct, handleChangeQuantity, isSend } = useCartManipulation()
    const goToProduct = () => {
-      if (type === 'hover') navigate(`/${product.productId}`)
+      if (type === 'hover') navigate(`/${product.productId}?type=${product.type}`)
    }
    return (
-      <div className='relative' onClick={goToProduct}>
+      <div className='relative'>
          <div className='grid grid-cols-6 gap-2  relative mb-5 mt-5'>
             <img src={product?.image} className='aspect-square' alt='img' />
             <div className='flex flex-col items-start col-span-2'>
-               <p className='text-primary'>{product?.name}</p>
+               <p className='text-primary' onClick={goToProduct}>
+                  {product?.name}
+               </p>
                <p className='text-greenY'>${product?.price}</p>
             </div>
             {type === 'checkout' && (
@@ -50,7 +52,7 @@ const ProductCart = ({ product, type }: Props) => {
                   } `}
                   onClick={() => removeProduct(product?.productId)}
                >
-                  {type === 'checkout' ? 'Remove' : <CloseOutlined className='text-primary' />}
+                  {type === 'checkout' ? 'Remove' : <CloseOutlined rev={''} className='text-primary' />}
                </button>
             </div>
          </div>

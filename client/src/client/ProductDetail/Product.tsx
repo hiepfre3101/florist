@@ -1,27 +1,34 @@
 import { useEffect, useState } from 'react'
 import { IProduct } from '../../interface/product'
-import { useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { getOneProduct } from '../../api/product/product'
 import SlideProduct from './SlideProduct'
 import { InputNumber, Rate } from 'antd'
 import Loading from '../../components/Loading/Loading'
 import useCartManipulation from '../../hooks/useCartManipulation'
 import { ProductInCart } from '../../interface/cart'
+import { TypeForm } from '../../configAntd/custom-form/configForm'
 const Product = () => {
    const { addToCart, quantity, setQuantity } = useCartManipulation()
    const { id: idProduct } = useParams()
+   const navigate = useNavigate()
    const [product, setProduct] = useState({} as IProduct)
    const [loading, setLoading] = useState<boolean>(false)
+   const type: TypeForm | null = new URLSearchParams(useLocation().search).get('type') as TypeForm
    useEffect(() => {
       window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+      if (type === null || !type) {
+         navigate('/error')
+      }
       ;(async () => {
          try {
             setLoading(true)
-            const { data } = await getOneProduct(idProduct)
+            const { data } = await getOneProduct(idProduct, type)
             setProduct(data.data)
             setLoading(false)
          } catch (error) {
             console.log(error)
+            navigate('/error')
          }
       })()
    }, [idProduct])
@@ -31,8 +38,6 @@ const Product = () => {
       <div className='gap-32 mt-10 px-36 grid grid-cols-5 w-full pb-10'>
          <SlideProduct product={product} />
          <div className='col-start-4 col-span-2'>
-            {product?.type && <p className='text-gray'>{product?.type.name}</p>}
-
             <p className='text-2xl text-primary italic'>{product?.name}</p>
             <div className='flex gap-4 text-orangeH'>
                <span className='text-md italic font-normal'>Price</span>
@@ -67,13 +72,18 @@ const Product = () => {
             <div className='mt-10 w-full flex flex-col items-start'>
                <p className='text-primary text-lg font-semibold'>Product Infomation</p>
                <div className='text-gray'>
-                  {product?.description} Lorem ipsum dolor sit amet consectetur, adipisicing elit. Molestias voluptatum
-                  ratione ut nostrum? Facere, nostrum suscipit quos nobis voluptatum laboriosam, enim maiores, quisquam
-                  deleniti ea recusandae dolore modi vel quam!
+                  {product?.description} Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quia repellendus
+                  tenetur asperiores, aspernatur minus ab accusamus dignissimos quaerat? Suscipit vero commodi dolorum
+                  rem et ducimus, consectetur harum? Nesciunt, alias quisquam?
                </div>
                <p className='text-black mt-10 font-semibold'>This bouquet includes :</p>
                <div className='text-gray flex flex-col items-start'>
-                  <p>3x Rose</p> <p>1x Rose</p> <p>3x Rose</p> <p>3x Rose</p>
+                  {type === 'bouquet' &&
+                     product.ingredients?.map((item) => (
+                        <p key={item.flower._id}>
+                           {item.quantity} x {item.flower.name}
+                        </p>
+                     ))}
                </div>
             </div>
          </div>

@@ -16,6 +16,7 @@ export interface IProduct {
    images: IImage[]
    description: string
    categories: ICategory[]
+   type: TypeForm
 }
 export interface IInputProduct {
    name: string

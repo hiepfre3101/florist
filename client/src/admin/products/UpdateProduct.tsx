@@ -50,7 +50,7 @@ const UpdateProduct = () => {
    useEffect(() => {
       ;(async () => {
          if (type === null) {
-            navigate('/admin/products')
+            navigate('/admin/error')
          }
          try {
             const {
@@ -67,7 +67,7 @@ const UpdateProduct = () => {
             dispatch(imageSlice.actions.setImages([]))
             dispatch(imageSlice.actions.setImagesSelected([]))
             message.error('Something wrong!')
-            navigate('/admin/products')
+            navigate('/admin/error')
             console.log(error)
          }
       })()
