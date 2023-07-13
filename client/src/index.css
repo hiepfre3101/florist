@@ -87,3 +87,14 @@ a {
     transform: translateY(0%);
   }
 }
+.bg-card-product{
+  right:-1.5rem;
+  animation: mover 0.6s  1  ease-in-out;
+}
+@keyframes mover {
+  from{
+   right: 0;
+  }to{
+    right: -1.5rem;
+  }
+}

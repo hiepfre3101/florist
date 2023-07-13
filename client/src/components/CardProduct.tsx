@@ -12,12 +12,10 @@ type Props = {
    link: string
    titleSize?: string
    priceSize?: string
-   hasBg?: boolean
    disableHover?: boolean
 }
 
 const CardProduct = ({
-   hasBg = false,
    imgs,
    title,
    price,
@@ -29,20 +27,19 @@ const CardProduct = ({
    category,
    disableHover
 }: Props) => {
-   const [index, setIndex] = useState(1)
+   const [isHover, setIsHover] = useState(false)
    return (
-      <Link to={link} className={`block h-full relative ${className}`}>
+      <Link
+         to={link}
+         className={`block h-full relative ${className}`}
+         onMouseOver={() => setIsHover(true)}
+         onMouseLeave={() => setIsHover(false)}
+      >
          <img
             loading='lazy'
-            src={imgs[index].url}
+            src={imgs[0].url}
             alt='img'
             className={` w-[200px]  aspect-square ${imgSize} duration-700`}
-            onMouseOver={() => {
-               if (!disableHover) setIndex(imgs.length - 1)
-            }}
-            onMouseLeave={() => {
-               if (!disableHover) setIndex(1)
-            }}
          />
          <div className='w-full  flex flex-col items-center gap-2 mt-5'>
             <p className='text-gray font-semibold uppercase text-sm font-vollkorn'>{category}</p>
@@ -51,8 +48,8 @@ const CardProduct = ({
                $ <span className={`font-semibold ${priceSize}`}>{price}</span>
             </p>
          </div>
-         {hasBg && (
-            <div className='-z-10 -right-3 w-full h-2/3 rounded-md rounded-br-[2rem] absolute top-[30%] bg-yellowW'></div>
+         {isHover && (
+            <div className='-z-10 bg-card-product w-full h-[70%] rounded-md rounded-br-[2rem] absolute top-[30%] bg-yellowW '></div>
          )}
       </Link>
    )

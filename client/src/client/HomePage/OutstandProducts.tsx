@@ -25,9 +25,8 @@ const OutstandProducts = () => {
                      price={product?.price}
                      link={`/${product?._id}?type=${product.type}`}
                      imgSize='w-full aspect-square'
-                     titleSize={index === 1 ? 'text-xl' : 'text-sm'}
-                     priceSize={index === 1 ? 'text-xl' : 'text-sm'}
-                     hasBg={index === 3}
+                     titleSize={index === 1 ? 'text-2xl' : 'text-xl'}
+                     priceSize={index === 1 ? 'text-2xl' : 'text-xl'}
                      disableHover
                   />
                </div>

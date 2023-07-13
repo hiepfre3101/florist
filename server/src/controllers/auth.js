@@ -19,7 +19,7 @@ export const createAccount = async (req, res) => {
     }
     const userExist = await User.findOne({ email: req.body.email });
     if (userExist)
-      return res.status(200).json({
+      return res.status(202).json({
         message: "Email da ton tai!!",
         status: "not success",
       });
